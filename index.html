@@ -281,6 +281,44 @@ tr:hover td{background:var(--bg3);}
 .prio-media{color:var(--gold);border-color:#2a1a00;background:rgba(42,26,0,.3);}
 .prio-baixa{color:#6bcb77;border-color:#003a0d;background:rgba(0,58,13,.3);}
 
+/* ── GOLPES ── */
+.g-filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.g-filter{padding:5px 14px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);border-radius:3px;cursor:pointer;transition:all .15s;font-family:var(--font);}
+.g-filter:hover{border-color:var(--green);color:var(--green);}
+.g-filter.active{background:var(--green-dk);border-color:var(--green2);color:var(--green);}
+.g-filter.cat-heist.active{background:#1a0030;border-color:#9b59b6;color:#c39bd3;}
+.g-filter.cat-contato.active{background:#001a30;border-color:var(--blue);color:var(--blue);}
+.g-filter.cat-corrida.active{background:#1a0d00;border-color:var(--orange);color:var(--orange);}
+.g-filter.cat-agente.active{background:#001a10;border-color:var(--green2);color:var(--green);}
+.g-add-form{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:16px;margin-bottom:16px;}
+.g-add-title{font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:2px;margin-bottom:12px;}
+.g-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
+.g-field label{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;display:block;margin-bottom:4px;}
+.g-field input,.g-field select{width:100%;padding:7px 10px;font-size:13px;font-family:var(--mono);background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--green);outline:none;}
+.g-field select{color:var(--white);}
+.g-field input:focus,.g-field select:focus{border-color:var(--green);}
+.g-add-btn{margin-top:10px;padding:8px 20px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--green2);background:var(--green-dk);color:var(--green);border-radius:4px;cursor:pointer;font-family:var(--font);transition:all .15s;}
+.g-add-btn:hover{background:var(--green);color:#000;}
+.g-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px;}
+.g-stat{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;}
+.g-stat-lbl{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:4px;}
+.g-stat-val{font-size:18px;font-weight:700;}
+.g-list{display:flex;flex-direction:column;gap:8px;}
+.g-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 16px;display:flex;align-items:center;gap:12px;transition:border-color .15s;}
+.g-item:hover{border-color:var(--border2);}
+.g-cat-badge{font-size:9px;font-family:var(--mono);letter-spacing:1px;padding:3px 8px;border-radius:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.badge-heist{background:#1a0030;color:#c39bd3;border:1px solid #4a1070;}
+.badge-contato{background:var(--blue-dk);color:var(--blue);border:1px solid #1a3a6c;}
+.badge-corrida{background:#1a0d00;color:var(--orange);border:1px solid #3a1a00;}
+.badge-agente{background:var(--green-dk);color:var(--green2);border:1px solid #004a1a;}
+.g-item-info{flex:1;min-width:0;}
+.g-item-name{font-size:14px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.g-item-meta{font-size:11px;font-family:var(--mono);color:var(--muted);margin-top:2px;}
+.g-item-val{font-size:16px;font-weight:700;color:var(--gold);font-family:var(--mono);white-space:nowrap;}
+.g-item-delete{cursor:pointer;color:var(--muted2);font-size:12px;padding:4px 6px;flex-shrink:0;}
+.g-item-delete:hover{color:var(--red);}
+.g-empty{text-align:center;padding:40px;font-family:var(--mono);color:var(--muted);font-size:13px;}
+
 /* ── NOTIFY ── */
 #notify{
   display:none;position:fixed;top:16px;left:50%;transform:translateX(-50%);
@@ -304,6 +342,7 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
   <div class="nav-links">
     <button class="nav-link active" onclick="showPage('dashboard')">Dashboard</button>
     <button class="nav-link" onclick="showPage('lucros')">Lucros</button>
+    <button class="nav-link" onclick="showPage('golpes')">Golpes</button>
     <button class="nav-link" onclick="showPage('timer')">Timer</button>
     <button class="nav-link" onclick="showPage('checklist')">Checklist</button>
   </div>
@@ -408,6 +447,90 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
   <div id="lucrosEmpty" style="text-align:center;padding:40px;font-family:var(--mono);color:var(--muted);font-size:13px;display:none;">
     Nenhum registro ainda. Adicione sua primeira entrada acima.
   </div>
+
+  <!-- EXTRAS -->
+  <div class="sec-header" style="margin-top:28px;">
+    <div class="sec-label">// valores avulsos</div>
+    <div class="sec-title" style="font-size:18px;">Extras & Missões</div>
+    <div class="sec-sub">Valores pontuais fora das fontes fixas</div>
+  </div>
+
+  <div class="add-row-form">
+    <div class="add-row-title">// NOVA ENTRADA AVULSA</div>
+    <div class="add-fields">
+      <div class="add-field"><label>Data</label><input type="date" id="exData" /></div>
+      <div class="add-field" style="grid-column:span 2"><label>Descrição</label><input type="text" id="exDesc" placeholder="ex: Missão Simeon, bonus diário..." /></div>
+      <div class="add-field"><label>Valor (R$)</label><input type="number" id="exValor" placeholder="0" min="0" /></div>
+    </div>
+    <button class="add-btn" onclick="addExtra()">+ Adicionar valor avulso</button>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+    <div style="font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;">
+      TOTAL AVULSO: <span id="exTotalLabel" style="color:var(--gold);font-weight:700;">R$ 0</span>
+    </div>
+    <button class="l-btn" style="border-color:#3a0000;color:#ff6b6b;" onclick="clearExtras()">✕ Limpar extras</button>
+  </div>
+
+  <div class="g-list" id="exList"></div>
+  <div class="g-empty" id="exEmpty" style="display:none">Nenhum valor avulso ainda.</div>
+</div>
+
+<!-- ══════════ GOLPES & MISSÕES ══════════ -->
+<div class="page" id="page-golpes">
+  <div class="sec-header">
+    <div class="sec-label">// atividades especiais</div>
+    <div class="sec-title">Golpes & Missões</div>
+    <div class="sec-sub">Registre sua parte em golpes, missões e contratos</div>
+  </div>
+
+  <div class="g-add-form">
+    <div class="g-add-title">// NOVA ENTRADA</div>
+    <div class="g-fields">
+      <div class="g-field">
+        <label>Data</label>
+        <input type="date" id="gData" />
+      </div>
+      <div class="g-field">
+        <label>Categoria</label>
+        <select id="gCat">
+          <option value="heist">Golpe (Heist)</option>
+          <option value="contato">Missão de Contato</option>
+          <option value="corrida">Corrida / Atividade</option>
+          <option value="agente">Contrato do Agente</option>
+        </select>
+      </div>
+      <div class="g-field">
+        <label>Nome</label>
+        <input type="text" id="gNome" placeholder="ex: Cayo Perico" />
+      </div>
+      <div class="g-field">
+        <label>Minha parte (R$)</label>
+        <input type="number" id="gValor" placeholder="0" min="0" />
+      </div>
+    </div>
+    <button class="g-add-btn" onclick="addGolpe()">+ Adicionar</button>
+  </div>
+
+  <div class="g-stats">
+    <div class="g-stat"><div class="g-stat-lbl">Total geral</div><div class="g-stat-val gold" id="gTotalGeral">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Golpes</div><div class="g-stat-val" style="color:#c39bd3" id="gTotalHeist">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Missões</div><div class="g-stat-val" style="color:var(--blue)" id="gTotalContato">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Corridas</div><div class="g-stat-val" style="color:var(--orange)" id="gTotalCorrida">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Contratos</div><div class="g-stat-val" style="color:var(--green)" id="gTotalAgente">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Registros</div><div class="g-stat-val green" id="gTotalCount">0</div></div>
+  </div>
+
+  <div class="g-filter-row">
+    <button class="g-filter active" onclick="gSetFilter('todos',this)">Todos</button>
+    <button class="g-filter cat-heist" onclick="gSetFilter('heist',this)">Golpes</button>
+    <button class="g-filter cat-contato" onclick="gSetFilter('contato',this)">Missões</button>
+    <button class="g-filter cat-corrida" onclick="gSetFilter('corrida',this)">Corridas</button>
+    <button class="g-filter cat-agente" onclick="gSetFilter('agente',this)">Contratos</button>
+  </div>
+
+  <div class="g-list" id="gList"></div>
+  <div class="g-empty" id="gEmpty" style="display:none">Nenhum registro ainda. Adicione sua primeira entrada acima.</div>
 </div>
 
 <!-- ══════════ TIMER ══════════ -->
@@ -495,8 +618,12 @@ function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
   $('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-link').forEach(b=>{ if(b.textContent.toLowerCase().includes(id.slice(0,4))) b.classList.add('active'); });
+  const map={dashboard:'dashboard',lucros:'lucros',golpes:'golpes',timer:'timer',checklist:'checklist'};
+  document.querySelectorAll('.nav-link').forEach(b=>{
+    if(b.textContent.toLowerCase().trim().includes(id.slice(0,4))) b.classList.add('active');
+  });
   if(id==='dashboard') renderDashboard();
+  if(id==='golpes') renderGolpes();
 }
 
 // ══════════════════════════════════════
@@ -582,8 +709,11 @@ function updateMeta(el){
 
 function renderDashboard(){
   const grand = lucros.reduce((a,r)=>a+r.total,0);
-  const pct   = meta>0?Math.min(100,(grand/meta)*100):0;
-  $('progTotal').textContent = fmtM(grand);
+  const grandGolpes = golpes.reduce((a,g)=>a+g.valor,0);
+  const grandExtras = extras.reduce((a,e)=>a+e.valor,0);
+  const grandTotal = grand + grandGolpes + grandExtras;
+  const pct   = meta>0?Math.min(100,(grandTotal/meta)*100):0;
+  $('progTotal').textContent = fmtM(grandTotal);
   $('progMeta').textContent  = 'de '+fmtM(meta);
   $('progFill').style.width  = pct+'%';
   $('progPct').textContent   = pct.toFixed(1)+'% concluído';
@@ -592,7 +722,7 @@ function renderDashboard(){
   const best = lucros.length?Math.max(...lucros.map(r=>r.total)):0;
   $('statMelhor').textContent = fmtM(best);
   $('statMedia').textContent  = lucros.length?fmtM(grand/lucros.length):'R$ 0';
-  $('statFalta').textContent  = fmtM(Math.max(0,meta-grand));
+  $('statFalta').textContent  = fmtM(Math.max(0,meta-grandTotal));
 
   const totals = FONTES.map((_,i)=>lucros.reduce((a,r)=>a+(r.vals[i]||0),0));
   const grid = $('fonteGrid');
@@ -791,10 +921,140 @@ function renderChecklist(){
 }
 
 // ══════════════════════════════════════
+// EXTRAS & MISSÕES AVULSAS
+// ══════════════════════════════════════
+let extras = load('extras', []);
+
+$('exData').value = new Date().toISOString().slice(0,10);
+
+function addExtra(){
+  const data  = $('exData').value || new Date().toISOString().slice(0,10);
+  const desc  = $('exDesc').value.trim();
+  const valor = parseFloat($('exValor').value) || 0;
+  if(!desc){ showNotify('⚠ Digite uma descrição!'); return; }
+  if(valor<=0){ showNotify('⚠ Digite um valor maior que zero!'); return; }
+  extras.push({ data, desc, valor });
+  extras.sort((a,b)=>b.data.localeCompare(a.data));
+  save('extras', extras);
+  $('exDesc').value = '';
+  $('exValor').value = '';
+  renderExtras();
+  renderDashboard();
+  showNotify('✓ Valor avulso adicionado!');
+}
+
+function deleteExtra(i){
+  extras.splice(i,1);
+  save('extras', extras);
+  renderExtras();
+  renderDashboard();
+}
+
+function clearExtras(){
+  if(!confirm('Apagar todos os valores avulsos?')) return;
+  extras=[]; save('extras',extras);
+  renderExtras(); renderDashboard();
+}
+
+function renderExtras(){
+  const list=$('exList'), empty=$('exEmpty');
+  const total = extras.reduce((a,e)=>a+e.valor,0);
+  $('exTotalLabel').textContent = fmtM(total);
+  if(extras.length===0){ list.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  list.innerHTML = extras.map((e,i)=>`
+    <div class="g-item">
+      <span class="g-cat-badge" style="background:#0d1a2a;color:#a0c4ff;border:1px solid #1a3a5c;">Avulso</span>
+      <div class="g-item-info">
+        <div class="g-item-name">${e.desc}</div>
+        <div class="g-item-meta">${e.data}</div>
+      </div>
+      <div class="g-item-val">${fmtM(e.valor)}</div>
+      <span class="g-item-delete" onclick="deleteExtra(${i})">✕</span>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════
+// GOLPES & MISSÕES
+// ══════════════════════════════════════
+let golpes = load('golpes', []);
+let gFilter = 'todos';
+
+const CAT_LABELS = { heist:'Golpe', contato:'Missão', corrida:'Corrida', agente:'Contrato' };
+
+$('gData').value = new Date().toISOString().slice(0,10);
+
+function addGolpe(){
+  const data  = $('gData').value || new Date().toISOString().slice(0,10);
+  const cat   = $('gCat').value;
+  const nome  = $('gNome').value.trim();
+  const valor = parseFloat($('gValor').value) || 0;
+  if(!nome){ showNotify('⚠ Digite o nome da atividade!'); return; }
+  if(valor<=0){ showNotify('⚠ Digite um valor maior que zero!'); return; }
+  golpes.push({ data, cat, nome, valor });
+  golpes.sort((a,b)=>b.data.localeCompare(a.data));
+  save('golpes', golpes);
+  $('gNome').value = '';
+  $('gValor').value = '';
+  renderGolpes();
+  renderDashboard();
+  showNotify('✓ '+CAT_LABELS[cat]+' registrado!');
+}
+
+function deleteGolpe(i){
+  golpes.splice(i,1);
+  save('golpes', golpes);
+  renderGolpes();
+  renderDashboard();
+}
+
+function gSetFilter(f, btn){
+  gFilter = f;
+  document.querySelectorAll('.g-filter').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGolpes();
+}
+
+function renderGolpes(){
+  const filtered = gFilter==='todos' ? golpes : golpes.filter(g=>g.cat===gFilter);
+  const list = $('gList'), empty = $('gEmpty');
+
+  // stats
+  const tots = { heist:0, contato:0, corrida:0, agente:0 };
+  golpes.forEach(g=>{ tots[g.cat]=(tots[g.cat]||0)+g.valor; });
+  const grand = Object.values(tots).reduce((a,b)=>a+b,0);
+  $('gTotalGeral').textContent   = fmtM(grand);
+  $('gTotalHeist').textContent   = fmtM(tots.heist);
+  $('gTotalContato').textContent = fmtM(tots.contato);
+  $('gTotalCorrida').textContent = fmtM(tots.corrida);
+  $('gTotalAgente').textContent  = fmtM(tots.agente);
+  $('gTotalCount').textContent   = golpes.length;
+
+  if(filtered.length===0){ list.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  // find original indices for delete
+  list.innerHTML = filtered.map(g=>{
+    const origIdx = golpes.indexOf(g);
+    return `<div class="g-item">
+      <span class="g-cat-badge badge-${g.cat}">${CAT_LABELS[g.cat]}</span>
+      <div class="g-item-info">
+        <div class="g-item-name">${g.nome}</div>
+        <div class="g-item-meta">${g.data}</div>
+      </div>
+      <div class="g-item-val">${fmtM(g.valor)}</div>
+      <span class="g-item-delete" onclick="deleteGolpe(${origIdx})">✕</span>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
 // INIT
 // ══════════════════════════════════════
 renderLucrosTable();
+renderExtras();
 renderDashboard();
+renderGolpes();
 tBuildGrid();
 renderChecklist();
 $('metaInput').value=meta.toLocaleString('pt-BR');
