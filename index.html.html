@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GTA Online — Los Santos HQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg:       #080808;
+  --bg2:      #101010;
+  --bg3:      #181818;
+  --bg4:      #202020;
+  --bg5:      #282828;
+  --green:    #00ff41;
+  --green2:   #00cc34;
+  --green-dk: #002a0d;
+  --gold:     #d4af37;
+  --gold2:    #a88a28;
+  --gold-dk:  #1a1000;
+  --red:      #ff4444;
+  --orange:   #ff8c00;
+  --blue:     #4a9eff;
+  --blue-dk:  #0d2040;
+  --muted:    #666;
+  --muted2:   #444;
+  --white:    #f0f0f0;
+  --border:   #1e1e1e;
+  --border2:  #2a2a2a;
+  --font:     'Rajdhani', sans-serif;
+  --mono:     'Share Tech Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--white);font-family:var(--font);min-height:100vh;overflow-x:hidden;}
+
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);
+}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,8,8,0.95);border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:54px;
+}
+.nav-brand{font-size:16px;font-weight:700;letter-spacing:2px;color:var(--white);}
+.nav-brand span{color:var(--green);}
+.nav-links{display:flex;gap:4px;}
+.nav-link{
+  padding:6px 14px;font-size:13px;font-weight:600;letter-spacing:1px;
+  text-transform:uppercase;font-family:var(--font);
+  border:none;background:transparent;color:var(--muted);cursor:pointer;
+  border-radius:3px;transition:all .15s;
+}
+.nav-link:hover,.nav-link.active{color:var(--green);background:var(--green-dk);}
+
+/* ── PAGES ── */
+.page{display:none;padding:28px 20px 60px;max-width:780px;margin:0 auto;}
+.page.active{display:block;}
+
+/* ── SECTION HEADER ── */
+.sec-header{margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border2);position:relative;}
+.sec-header::after{content:'';position:absolute;bottom:-1px;left:0;width:60px;height:2px;background:var(--green);}
+.sec-label{font-size:10px;font-family:var(--mono);color:var(--green);letter-spacing:4px;margin-bottom:6px;}
+.sec-title{font-size:26px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.sec-sub{font-size:13px;color:var(--muted);margin-top:4px;font-family:var(--mono);}
+
+/* ── DASHBOARD ── */
+.meta-card{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:6px;
+  padding:20px;margin-bottom:16px;
+}
+.meta-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.meta-label{font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.meta-edit{display:flex;align-items:center;gap:8px;}
+.meta-edit input{
+  width:160px;padding:6px 10px;font-size:14px;font-family:var(--mono);
+  background:var(--bg3);border:1px solid var(--border2);border-radius:4px;
+  color:var(--gold);outline:none;text-align:right;
+}
+.meta-edit input:focus{border-color:var(--gold);}
+.meta-edit label{font-size:12px;color:var(--muted);font-family:var(--mono);}
+
+.progress-section{margin-bottom:8px;}
+.progress-nums{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+.prog-total{font-size:30px;font-weight:700;color:var(--green);font-family:var(--mono);}
+.prog-meta{font-size:13px;color:var(--muted);font-family:var(--mono);}
+.prog-bar-wrap{background:var(--bg4);border-radius:3px;height:6px;overflow:hidden;margin-bottom:6px;}
+.prog-bar-fill{height:100%;border-radius:3px;background:var(--green);transition:width .5s ease;box-shadow:0 0 8px rgba(0,255,65,.3);}
+.prog-pct{font-size:11px;font-family:var(--mono);color:var(--muted);text-align:right;}
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px;}
+.stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;}
+.stat-lbl{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:4px;}
+.stat-val{font-size:18px;font-weight:700;color:var(--white);}
+.stat-val.green{color:var(--green);}
+.stat-val.gold{color:var(--gold);}
+.stat-sub{font-size:10px;color:var(--muted2);font-family:var(--mono);margin-top:2px;}
+
+.fonte-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;}
+.fonte-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:12px;}
+.fonte-name{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.fonte-val{font-size:16px;font-weight:700;color:var(--green);font-family:var(--mono);}
+.fonte-pct{font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:2px;}
+.fonte-bar{height:3px;background:var(--bg5);border-radius:2px;margin-top:6px;overflow:hidden;}
+.fonte-bar-fill{height:100%;border-radius:2px;background:var(--green2);}
+
+/* ── LUCROS ── */
+.lucros-controls{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;}
+.l-btn{
+  padding:7px 14px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  border:1px solid var(--border2);background:var(--bg3);color:var(--muted);
+  border-radius:4px;cursor:pointer;transition:all .15s;font-family:var(--font);
+}
+.l-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-dk);}
+.l-btn.primary{border-color:var(--green2);color:var(--green);}
+
+.lucros-table-wrap{overflow-x:auto;border-radius:6px;border:1px solid var(--border2);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead tr{background:var(--bg3);}
+th{padding:10px 12px;text-align:left;font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border2);}
+th:not(:first-child){text-align:right;}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--white);}
+td:not(:first-child){text-align:right;font-family:var(--mono);font-size:12px;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg3);}
+.td-dia{font-family:var(--mono);color:var(--muted);font-size:11px;}
+.td-total{color:var(--gold);font-weight:700;}
+.td-delete{cursor:pointer;color:var(--muted2);font-size:12px;padding:0 8px;}
+.td-delete:hover{color:var(--red);}
+.tfoot-row td{background:var(--bg3);color:var(--green);font-weight:700;font-family:var(--mono);}
+
+.add-row-form{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:6px;
+  padding:16px;margin-bottom:16px;
+}
+.add-row-title{font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:2px;margin-bottom:12px;}
+.add-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;}
+.add-field label{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;display:block;margin-bottom:4px;}
+.add-field input{
+  width:100%;padding:7px 10px;font-size:13px;font-family:var(--mono);
+  background:var(--bg3);border:1px solid var(--border2);border-radius:4px;
+  color:var(--green);outline:none;
+}
+.add-field input:focus{border-color:var(--green);}
+.add-btn{
+  margin-top:10px;padding:8px 20px;font-size:13px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;border:1px solid var(--green2);background:var(--green-dk);
+  color:var(--green);border-radius:4px;cursor:pointer;transition:all .15s;font-family:var(--font);
+}
+.add-btn:hover{background:var(--green);color:#000;}
+
+/* ── TIMER ── */
+.timer-settings{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.timer-settings label{font-size:12px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;}
+.timer-settings input[type=number]{
+  width:68px;padding:6px 10px;font-size:13px;font-family:var(--mono);
+  background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--green);outline:none;
+}
+.timer-settings input:focus{border-color:var(--green);}
+.t-gbtn{
+  padding:7px 14px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  border:1px solid var(--border2);background:var(--bg3);color:var(--muted);
+  border-radius:4px;cursor:pointer;transition:all .15s;font-family:var(--font);
+}
+.t-gbtn:hover{border-color:var(--green);color:var(--green);background:var(--green-dk);}
+.t-gbtn.gold{border-color:var(--gold2);color:var(--gold);}
+.t-gbtn.gold:hover{background:var(--gold-dk);}
+
+.timer-global-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+
+.timer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px;}
+.t-card{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:6px;
+  padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;
+  position:relative;transition:border-color .3s,box-shadow .3s;
+}
+.t-card.is-ready{border-color:var(--green);box-shadow:0 0 20px rgba(0,255,65,.07);}
+.t-card.is-urgent{border-color:var(--orange);}
+.t-card.is-bonus{border-color:var(--gold2);}
+.bonus-tag{
+  position:absolute;top:10px;right:10px;
+  font-size:9px;font-family:var(--mono);letter-spacing:1px;
+  background:var(--gold2);color:#000;padding:2px 7px;border-radius:2px;font-weight:700;
+}
+.t-card-top{display:flex;align-items:center;gap:8px;width:100%;}
+.t-icon{font-size:18px;}
+.t-name{font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.t-display{
+  font-size:38px;font-family:var(--mono);letter-spacing:4px;color:var(--white);
+  text-shadow:0 0 16px rgba(255,255,255,.08);transition:color .3s;line-height:1;
+}
+.t-display.urgent{color:var(--orange);text-shadow:0 0 10px rgba(255,140,0,.3);}
+.t-display.ready{color:var(--green);text-shadow:0 0 14px rgba(0,255,65,.4);animation:tpulse 1s ease-in-out infinite;}
+@keyframes tpulse{0%,100%{opacity:1}50%{opacity:.55}}
+.t-prog-bar{width:100%;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+.t-prog-fill{height:100%;border-radius:2px;transition:width 1s linear,background .5s;}
+.t-badge{font-size:10px;font-family:var(--mono);letter-spacing:2px;padding:3px 10px;border-radius:2px;text-transform:uppercase;border:1px solid transparent;}
+.tb-idle{color:var(--muted);border-color:var(--border2);}
+.tb-run{color:var(--blue);border-color:var(--blue-dk);background:rgba(13,32,64,.4);}
+.tb-ready{color:var(--green);border-color:var(--green-dk);background:rgba(0,42,13,.4);animation:tpulse 1s ease-in-out infinite;}
+.val-section{width:100%;}
+.val-label{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:4px;text-transform:uppercase;}
+.val-wrap{display:flex;align-items:center;border:1px solid var(--border2);border-radius:4px;overflow:hidden;}
+.val-prefix{padding:7px 8px;background:var(--bg4);font-family:var(--mono);font-size:11px;color:var(--muted);border-right:1px solid var(--border);white-space:nowrap;}
+.val-input{flex:1;padding:7px 8px;font-size:14px;font-family:var(--mono);background:var(--bg3);color:var(--green);border:none;outline:none;text-align:right;min-width:0;}
+.val-input:focus{background:var(--bg4);}
+.val-note{font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:3px;text-align:center;}
+.t-btn-row{display:flex;gap:6px;width:100%;}
+.t-btn{
+  flex:1;padding:7px 4px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  border:1px solid var(--border2);background:var(--bg3);color:var(--muted);
+  border-radius:3px;cursor:pointer;transition:all .15s;font-family:var(--font);
+}
+.t-btn:hover{background:var(--bg4);color:var(--white);}
+.t-btn-start{border-color:var(--blue-dk);color:var(--blue);}
+.t-btn-start:hover{background:#0d2040;border-color:var(--blue);}
+.t-btn-collect{border-color:var(--gold2);color:var(--gold);}
+.t-btn-collect:hover{background:var(--gold-dk);border-color:var(--gold);}
+
+.t-summary{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:14px 16px;margin-bottom:16px;}
+.t-sum-title{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;}
+.t-sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.t-sum-item{text-align:center;}
+.t-sum-lbl{font-size:10px;font-family:var(--mono);color:var(--muted);margin-bottom:4px;}
+.t-sum-val{font-size:18px;font-weight:700;}
+
+.t-log{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:14px 16px;}
+.t-log-title{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;}
+.t-log-clear{cursor:pointer;color:var(--muted);font-size:10px;}
+.t-log-clear:hover{color:var(--red);}
+.t-log-list{list-style:none;max-height:130px;overflow-y:auto;display:flex;flex-direction:column;gap:3px;}
+.t-log-list::-webkit-scrollbar{width:3px;}
+.t-log-list::-webkit-scrollbar-thumb{background:var(--border2);}
+.t-log-item{font-size:11px;font-family:var(--mono);color:var(--muted);padding:3px 0;border-bottom:1px solid var(--border);}
+.t-log-time{color:var(--green2);margin-right:8px;}
+.t-log-val{color:var(--gold);float:right;}
+
+/* ── CHECKLIST ── */
+.cl-progress-card{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:16px;margin-bottom:16px;}
+.cl-prog-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.cl-prog-label{font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:2px;}
+.cl-prog-count{font-size:22px;font-weight:700;color:var(--green);font-family:var(--mono);}
+.cl-bar-wrap{background:var(--bg4);border-radius:3px;height:5px;overflow:hidden;}
+.cl-bar-fill{height:100%;border-radius:3px;background:var(--green);transition:width .4s ease;}
+
+.cl-reset{float:right;font-size:11px;font-family:var(--mono);color:var(--muted);cursor:pointer;margin-bottom:12px;}
+.cl-reset:hover{color:var(--green);}
+
+.cl-group{margin-bottom:20px;}
+.cl-group-title{
+  font-size:10px;font-family:var(--mono);color:var(--green);letter-spacing:3px;
+  text-transform:uppercase;padding:6px 10px;background:var(--green-dk);
+  border-radius:4px;margin-bottom:8px;display:inline-block;
+}
+.cl-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:5px;
+  padding:11px 14px;margin-bottom:6px;cursor:pointer;transition:all .15s;
+  user-select:none;
+}
+.cl-item:hover{border-color:var(--border2);background:var(--bg3);}
+.cl-item.done{background:var(--green-dk);border-color:rgba(0,255,65,.15);}
+.cl-item.done .cl-task{color:var(--green);text-decoration:line-through;text-decoration-color:rgba(0,255,65,.3);}
+.cl-item.done .cl-etapa{color:rgba(0,255,65,.5);}
+.cl-check{
+  width:18px;height:18px;border:1.5px solid var(--border2);border-radius:3px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:11px;transition:all .15s;
+}
+.cl-item.done .cl-check{background:var(--green);border-color:var(--green);color:#000;}
+.cl-content{flex:1;}
+.cl-task{font-size:14px;font-weight:600;color:var(--white);transition:color .15s;}
+.cl-etapa{font-size:10px;font-family:var(--mono);color:var(--muted);margin-top:2px;}
+.cl-prio{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:2px;border:1px solid;}
+.prio-alta{color:#ff6b6b;border-color:#3a0000;background:rgba(58,0,0,.3);}
+.prio-media{color:var(--gold);border-color:#2a1a00;background:rgba(42,26,0,.3);}
+.prio-baixa{color:#6bcb77;border-color:#003a0d;background:rgba(0,58,13,.3);}
+
+/* ── NOTIFY ── */
+#notify{
+  display:none;position:fixed;top:16px;left:50%;transform:translateX(-50%);
+  background:var(--green-dk);border:1px solid var(--green);color:var(--green);
+  font-family:var(--mono);font-size:13px;letter-spacing:1px;
+  padding:10px 20px;border-radius:4px;z-index:200;white-space:nowrap;
+  box-shadow:0 0 30px rgba(0,255,65,.15);
+}
+#notify.show{display:block;animation:slideDown .25s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);color:var(--muted2);letter-spacing:2px;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+<div id="notify"></div>
+
+<nav>
+  <div class="nav-brand">GTA <span>HQ</span></div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="nav-link" onclick="showPage('lucros')">Lucros</button>
+    <button class="nav-link" onclick="showPage('timer')">Timer</button>
+    <button class="nav-link" onclick="showPage('checklist')">Checklist</button>
+  </div>
+</nav>
+
+<!-- ══════════ DASHBOARD ══════════ -->
+<div class="page active" id="page-dashboard">
+  <div class="sec-header">
+    <div class="sec-label">// visão geral</div>
+    <div class="sec-title">Dashboard</div>
+    <div class="sec-sub">Acompanhe seu progresso para a meta</div>
+  </div>
+
+  <div class="meta-card">
+    <div class="meta-top">
+      <div class="meta-label">Meta de lucro</div>
+      <div class="meta-edit">
+        <label>R$</label>
+        <input type="text" id="metaInput" value="10.000.000" oninput="updateMeta(this)" />
+      </div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-nums">
+        <div class="prog-total" id="progTotal">R$ 0</div>
+        <div class="prog-meta" id="progMeta">de R$ 10.000.000</div>
+      </div>
+      <div class="prog-bar-wrap"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
+      <div class="prog-pct" id="progPct">0% concluído</div>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-lbl">Dias registrados</div>
+      <div class="stat-val green" id="statDias">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Melhor dia</div>
+      <div class="stat-val gold" id="statMelhor">R$ 0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Média/dia</div>
+      <div class="stat-val" id="statMedia">R$ 0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Falta atingir</div>
+      <div class="stat-val" id="statFalta">R$ 0</div>
+    </div>
+  </div>
+
+  <div class="sec-header" style="margin-top:24px;">
+    <div class="sec-label">// por fonte</div>
+    <div class="sec-title" style="font-size:18px;">Receita acumulada</div>
+  </div>
+  <div class="fonte-grid" id="fonteGrid"></div>
+</div>
+
+<!-- ══════════ LUCROS ══════════ -->
+<div class="page" id="page-lucros">
+  <div class="sec-header">
+    <div class="sec-label">// registro</div>
+    <div class="sec-title">Lucros Diários</div>
+    <div class="sec-sub">Adicione seus ganhos por sessão</div>
+  </div>
+
+  <div class="add-row-form">
+    <div class="add-row-title">// NOVA ENTRADA</div>
+    <div class="add-fields">
+      <div class="add-field"><label>Data</label><input type="date" id="addData" /></div>
+      <div class="add-field"><label>Boate (R$)</label><input type="number" id="addBoate" placeholder="0" min="0" /></div>
+      <div class="add-field"><label>Bunker (R$)</label><input type="number" id="addBunker" placeholder="0" min="0" /></div>
+      <div class="add-field"><label>Carros (R$)</label><input type="number" id="addCarros" placeholder="0" min="0" /></div>
+      <div class="add-field"><label>Oficina (R$)</label><input type="number" id="addOficina" placeholder="0" min="0" /></div>
+      <div class="add-field"><label>Ferro-Velho (R$)</label><input type="number" id="addFerro" placeholder="0" min="0" /></div>
+    </div>
+    <button class="add-btn" onclick="addLucro()">+ Adicionar entrada</button>
+  </div>
+
+  <div class="lucros-controls">
+    <button class="l-btn" onclick="exportCSV()">↓ Exportar CSV</button>
+    <button class="l-btn" style="border-color:#3a0000;color:#ff6b6b;" onclick="clearLucros()">✕ Limpar tudo</button>
+  </div>
+
+  <div class="lucros-table-wrap">
+    <table id="lucrosTable">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Boate</th>
+          <th>Bunker</th>
+          <th>Carros</th>
+          <th>Oficina</th>
+          <th>Ferro</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="lucrosBody"></tbody>
+      <tfoot id="lucrosFoot"></tfoot>
+    </table>
+  </div>
+  <div id="lucrosEmpty" style="text-align:center;padding:40px;font-family:var(--mono);color:var(--muted);font-size:13px;display:none;">
+    Nenhum registro ainda. Adicione sua primeira entrada acima.
+  </div>
+</div>
+
+<!-- ══════════ TIMER ══════════ -->
+<div class="page" id="page-timer">
+  <div class="sec-header">
+    <div class="sec-label">// coleta passiva</div>
+    <div class="sec-title">Timer de Coleta</div>
+    <div class="sec-sub">Boate · Ferro-Velho · Lava-Jato — a cada 48 min</div>
+  </div>
+
+  <div class="timer-settings">
+    <label>INTERVALO (MIN):</label>
+    <input type="number" id="tCustomMin" value="48" min="1" max="120" />
+    <button class="t-gbtn" onclick="tApplyTime()">Aplicar</button>
+  </div>
+  <div class="timer-global-row">
+    <button class="t-gbtn" onclick="tStartAll()">▶ Iniciar todos</button>
+    <button class="t-gbtn" onclick="tResetAll()">↺ Resetar todos</button>
+    <button class="t-gbtn gold" onclick="tCollectAll()">$ Coletar todos</button>
+  </div>
+
+  <div class="timer-grid" id="timerGrid"></div>
+
+  <div class="t-summary">
+    <div class="t-sum-title">// resumo da sessão</div>
+    <div class="t-sum-grid">
+      <div class="t-sum-item"><div class="t-sum-lbl">Coletas</div><div class="t-sum-val green" id="tTotalCollects">0</div></div>
+      <div class="t-sum-item"><div class="t-sum-lbl">Arrecadado</div><div class="t-sum-val gold" id="tTotalEarned">R$ 0</div></div>
+      <div class="t-sum-item"><div class="t-sum-lbl">Próxima</div><div class="t-sum-val" id="tNextCollect">--:--</div></div>
+    </div>
+  </div>
+
+  <div class="t-log">
+    <div class="t-log-title">
+      <span>// histórico de coletas</span>
+      <span class="t-log-clear" onclick="tClearLog()">[ limpar ]</span>
+    </div>
+    <ul class="t-log-list" id="tLogList">
+      <li class="t-log-item"><span class="t-log-time">--:--</span>Aguardando primeira coleta...</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════ CHECKLIST ══════════ -->
+<div class="page" id="page-checklist">
+  <div class="sec-header">
+    <div class="sec-label">// rotina diária</div>
+    <div class="sec-title">Checklist</div>
+    <div class="sec-sub">Marque suas tarefas da sessão</div>
+  </div>
+
+  <div class="cl-progress-card">
+    <div class="cl-prog-top">
+      <div class="cl-prog-label">PROGRESSO DA SESSÃO</div>
+      <div class="cl-prog-count" id="clCount">0 / 0</div>
+    </div>
+    <div class="cl-bar-wrap"><div class="cl-bar-fill" id="clBar" style="width:0%"></div></div>
+  </div>
+
+  <div style="text-align:right;margin-bottom:12px;">
+    <span class="cl-reset" onclick="resetChecklist()">↺ Resetar todas as tarefas</span>
+  </div>
+
+  <div id="checklistContainer"></div>
+</div>
+
+<footer>LOS SANTOS HQ &nbsp;|&nbsp; GTA ONLINE TRACKER &nbsp;|&nbsp; DADOS SALVOS LOCALMENTE</footer>
+
+<script>
+// ══════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,'0');
+const fmtM = v => 'R$ '+Math.round(v).toLocaleString('pt-BR');
+const nowStr = () => { const d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds()); };
+
+function showNotify(msg){
+  const el=$('notify');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),4000);
+}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
+  $('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(b=>{ if(b.textContent.toLowerCase().includes(id.slice(0,4))) b.classList.add('active'); });
+  if(id==='dashboard') renderDashboard();
+}
+
+// ══════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════
+function save(k,v){ try{localStorage.setItem('gta_'+k, JSON.stringify(v));}catch(e){} }
+function load(k,def){ try{const v=localStorage.getItem('gta_'+k); return v!=null?JSON.parse(v):def;}catch(e){return def;} }
+
+// ══════════════════════════════════════
+// LUCROS
+// ══════════════════════════════════════
+let lucros = load('lucros', []);
+const FONTES = ['boate','bunker','carros','oficina','ferro'];
+const FONTE_LABELS = ['Boate','Bunker','Carros','Oficina','Ferro'];
+const FONTE_ICONS  = ['🎵','📦','🚗','🔧','🔩'];
+
+$('addData').value = new Date().toISOString().slice(0,10);
+
+function addLucro(){
+  const data = $('addData').value || new Date().toISOString().slice(0,10);
+  const vals = FONTES.map(f=>parseFloat($('add'+f.charAt(0).toUpperCase()+f.slice(1)).value)||0);
+  const total = vals.reduce((a,b)=>a+b,0);
+  if(total===0){ showNotify('⚠ Digite pelo menos um valor!'); return; }
+  lucros.push({ data, vals, total });
+  lucros.sort((a,b)=>a.data.localeCompare(b.data));
+  save('lucros', lucros);
+  FONTES.forEach(f=>{ const el=$('add'+f.charAt(0).toUpperCase()+f.slice(1)); if(el) el.value=''; });
+  renderLucrosTable();
+  renderDashboard();
+  showNotify('✓ Entrada adicionada!');
+}
+
+function deleteLucro(i){
+  lucros.splice(i,1);
+  save('lucros',lucros);
+  renderLucrosTable();
+  renderDashboard();
+}
+
+function clearLucros(){
+  if(!confirm('Apagar todos os registros?')) return;
+  lucros=[]; save('lucros',lucros);
+  renderLucrosTable(); renderDashboard();
+}
+
+function exportCSV(){
+  let csv='Data,Boate,Bunker,Carros,Oficina,Ferro,Total\n';
+  lucros.forEach(r=>{ csv+=r.data+','+r.vals.join(',')+','+r.total+'\n'; });
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='gta_lucros.csv'; a.click();
+}
+
+function renderLucrosTable(){
+  const body=$('lucrosBody'), foot=$('lucrosFoot');
+  const empty=$('lucrosEmpty');
+  if(lucros.length===0){ body.innerHTML=''; foot.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  body.innerHTML = lucros.map((r,i)=>`
+    <tr>
+      <td class="td-dia">${r.data}</td>
+      ${r.vals.map(v=>`<td>${v>0?fmtM(v):'-'}</td>`).join('')}
+      <td class="td-total">${fmtM(r.total)}</td>
+      <td class="td-delete" onclick="deleteLucro(${i})">✕</td>
+    </tr>
+  `).join('');
+  const totals = FONTES.map((_,i)=>lucros.reduce((a,r)=>a+(r.vals[i]||0),0));
+  const grand  = totals.reduce((a,b)=>a+b,0);
+  foot.innerHTML=`<tr class="tfoot-row"><td>TOTAL</td>${totals.map(v=>`<td>${fmtM(v)}</td>`).join('')}<td class="td-total">${fmtM(grand)}</td><td></td></tr>`;
+}
+
+// ══════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════
+let meta = load('meta', 10000000);
+
+function updateMeta(el){
+  const raw = el.value.replace(/\D/g,'');
+  meta = parseInt(raw)||0;
+  save('meta', meta);
+  renderDashboard();
+}
+
+function renderDashboard(){
+  const grand = lucros.reduce((a,r)=>a+r.total,0);
+  const pct   = meta>0?Math.min(100,(grand/meta)*100):0;
+  $('progTotal').textContent = fmtM(grand);
+  $('progMeta').textContent  = 'de '+fmtM(meta);
+  $('progFill').style.width  = pct+'%';
+  $('progPct').textContent   = pct.toFixed(1)+'% concluído';
+
+  $('statDias').textContent   = lucros.length;
+  const best = lucros.length?Math.max(...lucros.map(r=>r.total)):0;
+  $('statMelhor').textContent = fmtM(best);
+  $('statMedia').textContent  = lucros.length?fmtM(grand/lucros.length):'R$ 0';
+  $('statFalta').textContent  = fmtM(Math.max(0,meta-grand));
+
+  const totals = FONTES.map((_,i)=>lucros.reduce((a,r)=>a+(r.vals[i]||0),0));
+  const grid = $('fonteGrid');
+  grid.innerHTML = FONTES.map((f,i)=>{
+    const pf = grand>0?Math.round((totals[i]/grand)*100):0;
+    return `<div class="fonte-card">
+      <div class="fonte-name">${FONTE_ICONS[i]} ${FONTE_LABELS[i]}</div>
+      <div class="fonte-val">${fmtM(totals[i])}</div>
+      <div class="fonte-pct">${pf}% do total</div>
+      <div class="fonte-bar"><div class="fonte-bar-fill" style="width:${pf}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
+// TIMER
+// ══════════════════════════════════════
+const TODAY = new Date();
+const IS_BONUS = TODAY <= new Date('2025-04-01T23:59:59');
+const T_SOURCES = [
+  { id:'boate',      name:'Boate',       icon:'🎵', defaultVal:10000, note:'Varia com popularidade' },
+  { id:'ferrovelho', name:'Ferro-Velho', icon:'🔧', defaultVal:5000,  note:'Varia com o serviço' },
+  { id:'lavajato',   name:'Lava-Jato',   icon:'🚿', defaultVal:7000,  note: IS_BONUS?'⚡ Bônus ativo até 1/abr!':'Valor normal' },
+];
+let tTimers={}, tGlobalDur=48*60, tSessionTotal=0, tSessionCollects=0;
+
+const tFmt = s=>pad(Math.floor(Math.abs(s)/60))+':'+pad(Math.abs(s)%60);
+const tFmtM= v=>'R$ '+Math.round(v).toLocaleString('pt-BR');
+function tGetVal(id){ return parseInt(($('tval-'+id)||{}).value?.replace(/\D/g,'')||'0')||0; }
+
+function tAddLog(name,val,type){
+  const list=$('tLogList');
+  if(list.children[0]?.textContent.includes('Aguardando')) list.innerHTML='';
+  const li=document.createElement('li'); li.className='t-log-item';
+  const vs=val>0?`<span class="t-log-val">${tFmtM(val)}</span>`:'';
+  li.innerHTML=`<span class="t-log-time">${nowStr()}</span>${name} — ${type}${vs}`;
+  list.prepend(li);
+  if(list.children.length>40) list.removeChild(list.lastChild);
+}
+
+function tClearLog(){ $('tLogList').innerHTML='<li class="t-log-item"><span class="t-log-time">--:--</span>Log limpo.</li>'; }
+
+function tUpdateSummary(){
+  $('tTotalCollects').textContent=tSessionCollects;
+  $('tTotalEarned').textContent=tFmtM(tSessionTotal);
+  let minR=Infinity;
+  T_SOURCES.forEach(s=>{ const t=tTimers[s.id]; if(t?.running&&t.remaining>0&&t.remaining<minR) minR=t.remaining; });
+  $('tNextCollect').textContent=minR===Infinity?'--:--':tFmt(minR);
+}
+
+function tRenderCard(src){
+  const t=tTimers[src.id]; if(!t) return;
+  const pct=Math.min(100,((tGlobalDur-t.remaining)/tGlobalDur)*100);
+  const isReady=t.remaining<=0, isUrgent=!isReady&&t.remaining<=120&&t.running;
+  const card=$('tcard-'+src.id); if(!card) return;
+  const disp=card.querySelector('.t-display');
+  disp.textContent=isReady?'PRONTO!':tFmt(t.remaining);
+  disp.className='t-display'+(isReady?' ready':isUrgent?' urgent':'');
+  const fill=card.querySelector('.t-prog-fill');
+  fill.style.width=pct+'%';
+  fill.style.background=isReady?'#00ff41':isUrgent?'#ff8c00':'#4a9eff';
+  const badge=card.querySelector('.t-badge');
+  if(isReady){badge.textContent='◆ PRONTO PARA COLETAR';badge.className='t-badge tb-ready';}
+  else if(t.running){badge.textContent='● CONTANDO...';badge.className='t-badge tb-run';}
+  else{badge.textContent='○ PAUSADO';badge.className='t-badge tb-idle';}
+  card.className='t-card'+(isReady?' is-ready':'')+(isUrgent?' is-urgent':'')+((src.id==='lavajato'&&IS_BONUS)?' is-bonus':'');
+  tUpdateSummary();
+}
+
+function tStartTimer(id){
+  const t=tTimers[id]; if(!t||t.running||t.remaining<=0) return;
+  t.running=true;
+  t.interval=setInterval(()=>{
+    t.remaining--;
+    const src=T_SOURCES.find(s=>s.id===id);
+    tRenderCard(src);
+    if(t.remaining<=0){
+      clearInterval(t.interval); t.running=false;
+      showNotify(src.icon+' '+src.name+' pronta para coletar!');
+      tAddLog(src.name,0,'PRONTA ⚡');
+      tRenderCard(src);
+    }
+  },1000);
+  tRenderCard(T_SOURCES.find(s=>s.id===id));
+}
+
+function tResetTimer(id){
+  const t=tTimers[id]; if(!t) return;
+  clearInterval(t.interval); t.running=false; t.remaining=tGlobalDur;
+  tRenderCard(T_SOURCES.find(s=>s.id===id));
+}
+
+function tCollectTimer(id){
+  const src=T_SOURCES.find(s=>s.id===id);
+  const val=tGetVal(id);
+  tSessionTotal+=val; tSessionCollects++;
+  tAddLog(src.name,val,'coletado');
+  tResetTimer(id); tStartTimer(id);
+  tUpdateSummary();
+}
+
+function tStartAll()  { T_SOURCES.forEach(s=>tStartTimer(s.id)); }
+function tResetAll()  { T_SOURCES.forEach(s=>tResetTimer(s.id)); }
+function tCollectAll(){ T_SOURCES.forEach(s=>tCollectTimer(s.id)); }
+function tApplyTime() { const v=parseInt($('tCustomMin').value); if(v>0){tGlobalDur=v*60;tResetAll();} }
+
+function tBuildGrid(){
+  const grid=$('timerGrid'); grid.innerHTML='';
+  T_SOURCES.forEach(src=>{
+    tTimers[src.id]={remaining:tGlobalDur,running:false,interval:null};
+    const isBonus=src.id==='lavajato'&&IS_BONUS;
+    const div=document.createElement('div');
+    div.className='t-card'+(isBonus?' is-bonus':'');
+    div.id='tcard-'+src.id;
+    div.innerHTML=`
+      ${isBonus?'<div class="bonus-tag">BÔNUS</div>':''}
+      <div class="t-card-top"><span class="t-icon">${src.icon}</span><span class="t-name">${src.name}</span></div>
+      <div class="t-display">${tFmt(tGlobalDur)}</div>
+      <div class="t-prog-bar"><div class="t-prog-fill" style="width:0%"></div></div>
+      <span class="t-badge tb-idle">○ PAUSADO</span>
+      <div class="val-section">
+        <div class="val-label">Valor coletado</div>
+        <div class="val-wrap">
+          <span class="val-prefix">R$</span>
+          <input class="val-input" id="tval-${src.id}" type="text"
+            value="${src.defaultVal.toLocaleString('pt-BR')}"
+            oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+            placeholder="0" />
+        </div>
+        <div class="val-note">${src.note}</div>
+      </div>
+      <div class="t-btn-row">
+        <button class="t-btn t-btn-start"   onclick="tStartTimer('${src.id}')">▶ Iniciar</button>
+        <button class="t-btn"               onclick="tResetTimer('${src.id}')">↺ Reset</button>
+        <button class="t-btn t-btn-collect" onclick="tCollectTimer('${src.id}')">$ Coletei</button>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════
+// CHECKLIST
+// ══════════════════════════════════════
+const CL_TASKS = [
+  {grupo:'🏁 Início', task:'Coletar dinheiro da boate',    prio:'alta'},
+  {grupo:'🏁 Início', task:'Manter popularidade da boate', prio:'alta'},
+  {grupo:'🏁 Início', task:'Verificar missões passivas',   prio:'media'},
+  {grupo:'🏢 Boate',  task:'Verificar estoque da boate',   prio:'alta'},
+  {grupo:'🏢 Boate',  task:'Iniciar técnicos se parado',   prio:'media'},
+  {grupo:'🚗 Ativo',  task:'Vender carro (galpão)',         prio:'alta'},
+  {grupo:'🚗 Ativo',  task:'Contrato oficina tuning',       prio:'media'},
+  {grupo:'🚗 Ativo',  task:'Missão ferro-velho',            prio:'baixa'},
+  {grupo:'🚗 Ativo',  task:'Roubar suprimentos bunker',     prio:'alta'},
+  {grupo:'🔁 Loop',   task:'Repetir atividades do ativo',   prio:'media'},
+  {grupo:'🔁 Loop',   task:'Verificar tempo boate/bunker',  prio:'media'},
+  {grupo:'💵 Venda',  task:'Venda boate cheia',             prio:'alta'},
+  {grupo:'💵 Venda',  task:'Venda bunker cheio',            prio:'alta'},
+  {grupo:'💵 Venda',  task:'Registrar lucros no site',      prio:'media'},
+  {grupo:'📝 Extra',  task:'Missão contato especial',       prio:'baixa'},
+];
+
+let clDone = load('clDone', {});
+
+function toggleTask(i){
+  clDone[i]=!clDone[i];
+  save('clDone',clDone);
+  renderChecklist();
+}
+
+function resetChecklist(){
+  clDone={}; save('clDone',clDone); renderChecklist();
+}
+
+function renderChecklist(){
+  const total=CL_TASKS.length;
+  const done=Object.values(clDone).filter(Boolean).length;
+  $('clCount').textContent=done+' / '+total;
+  $('clBar').style.width=(total>0?(done/total*100):0)+'%';
+
+  const grupos=[...new Set(CL_TASKS.map(t=>t.grupo))];
+  $('checklistContainer').innerHTML=grupos.map(g=>{
+    const tasks=CL_TASKS.map((t,i)=>({...t,i})).filter(t=>t.grupo===g);
+    return `<div class="cl-group">
+      <div class="cl-group-title">${g}</div>
+      ${tasks.map(t=>`
+        <div class="cl-item${clDone[t.i]?' done':''}" onclick="toggleTask(${t.i})">
+          <div class="cl-check">${clDone[t.i]?'✓':''}</div>
+          <div class="cl-content">
+            <div class="cl-task">${t.task}</div>
+            <div class="cl-etapa">${t.grupo}</div>
+          </div>
+          <span class="cl-prio prio-${t.prio}">${t.prio==='alta'?'● Alta':t.prio==='media'?'● Média':'● Baixa'}</span>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+renderLucrosTable();
+renderDashboard();
+tBuildGrid();
+renderChecklist();
+$('metaInput').value=meta.toLocaleString('pt-BR');
+</script>
+</body>
+</html>
