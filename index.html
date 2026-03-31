@@ -418,11 +418,11 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
     <div class="add-row-title">// NOVA ENTRADA</div>
     <div class="add-fields">
       <div class="add-field"><label>Data</label><input type="date" id="addData" /></div>
-      <div class="add-field"><label>Boate (R$)</label><input type="number" id="addBoate" placeholder="0" min="0" /></div>
-      <div class="add-field"><label>Bunker (R$)</label><input type="number" id="addBunker" placeholder="0" min="0" /></div>
-      <div class="add-field"><label>Carros (R$)</label><input type="number" id="addCarros" placeholder="0" min="0" /></div>
-      <div class="add-field"><label>Oficina (R$)</label><input type="number" id="addOficina" placeholder="0" min="0" /></div>
-      <div class="add-field"><label>Ferro-Velho (R$)</label><input type="number" id="addFerro" placeholder="0" min="0" /></div>
+      <div class="add-field"><label>Boate (R$)</label><input type="number" id="addBoate" placeholder="0,00" min="0" step="0.01" /></div>
+      <div class="add-field"><label>Bunker (R$)</label><input type="number" id="addBunker" placeholder="0,00" min="0" step="0.01" /></div>
+      <div class="add-field"><label>Carros (R$)</label><input type="number" id="addCarros" placeholder="0,00" min="0" step="0.01" /></div>
+      <div class="add-field"><label>Oficina (R$)</label><input type="number" id="addOficina" placeholder="0,00" min="0" step="0.01" /></div>
+      <div class="add-field"><label>Ferro-Velho (R$)</label><input type="number" id="addFerro" placeholder="0,00" min="0" step="0.01" /></div>
     </div>
     <button class="add-btn" onclick="addLucro()">+ Adicionar entrada</button>
   </div>
@@ -466,7 +466,7 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
     <div class="add-fields">
       <div class="add-field"><label>Data</label><input type="date" id="exData" /></div>
       <div class="add-field" style="grid-column:span 2"><label>Descrição</label><input type="text" id="exDesc" placeholder="ex: Missão Simeon, bonus diário..." /></div>
-      <div class="add-field"><label>Valor (R$)</label><input type="number" id="exValor" placeholder="0" min="0" /></div>
+      <div class="add-field"><label>Valor (R$)</label><input type="number" id="exValor" placeholder="0,00" min="0" step="0.01" /></div>
     </div>
     <button class="add-btn" onclick="addExtra()">+ Adicionar valor avulso</button>
   </div>
@@ -554,7 +554,7 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
       </div>
       <div class="g-field">
         <label>Minha parte (R$)</label>
-        <input type="number" id="gValor" placeholder="0" min="0" />
+        <input type="number" id="gValor" placeholder="0,00" min="0" step="0.01" />
       </div>
     </div>
     <button class="g-add-btn" onclick="addGolpe()">+ Adicionar</button>
@@ -665,7 +665,7 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
 // ══════════════════════════════════════
 const $ = id => document.getElementById(id);
 const pad = n => String(n).padStart(2,'0');
-const fmtM = v => 'R$ '+Math.round(v).toLocaleString('pt-BR');
+const fmtM = v => 'R$ '+Number(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 const nowStr = () => { const d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds()); };
 
 function showNotify(msg){
@@ -761,8 +761,8 @@ function renderLucrosTable(){
 let meta = load('meta', 10000000);
 
 function updateMeta(el){
-  const raw = el.value.replace(/\D/g,'');
-  meta = parseInt(raw)||0;
+  const raw = el.value.replace(/[^0-9,\.]/g,'').replace(',','.');
+  meta = parseFloat(raw)||0;
   save('meta', meta);
   renderDashboard();
 }
@@ -810,8 +810,8 @@ const T_SOURCES = [
 let tTimers={}, tGlobalDur=48*60, tSessionTotal=0, tSessionCollects=0;
 
 const tFmt = s=>pad(Math.floor(Math.abs(s)/60))+':'+pad(Math.abs(s)%60);
-const tFmtM= v=>'R$ '+Math.round(v).toLocaleString('pt-BR');
-function tGetVal(id){ return parseInt(($('tval-'+id)||{}).value?.replace(/\D/g,'')||'0')||0; }
+const tFmtM= v=>'R$ '+Number(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+function tGetVal(id){ return parseFloat(($('tval-'+id)||{}).value?.replace(/[^0-9,]/g,'').replace(',','.')||'0')||0; }
 
 function tAddLog(name,val,type){
   const list=$('tLogList');
@@ -908,9 +908,9 @@ function tBuildGrid(){
         <div class="val-wrap">
           <span class="val-prefix">R$</span>
           <input class="val-input" id="tval-${src.id}" type="text"
-            value="${src.defaultVal.toLocaleString('pt-BR')}"
-            oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-            placeholder="0" />
+            value="${src.defaultVal.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}"
+            oninput="this.value=this.value.replace(/[^0-9,]/g,'')"
+            placeholder="0,00" />
         </div>
         <div class="val-note">${src.note}</div>
       </div>
@@ -1223,7 +1223,7 @@ function renderGolpes(){
                <input id="gedit-nome-${origIdx}" type="text" value="${g.nome}"
                  style="flex:1;min-width:120px;padding:5px 8px;font-size:13px;font-family:var(--mono);
                         background:var(--bg4);border:1px solid var(--green2);border-radius:4px;color:var(--green);outline:none;" />
-               <input id="gedit-valor-${origIdx}" type="number" value="${g.valor}"
+               <input id="gedit-valor-${origIdx}" type="number" value="${g.valor}" step="0.01"
                  style="width:110px;padding:5px 8px;font-size:13px;font-family:var(--mono);
                         background:var(--bg4);border:1px solid var(--green2);border-radius:4px;color:var(--gold);outline:none;" />
              </div>`
@@ -1276,7 +1276,7 @@ renderDashboard();
 renderGolpes();
 tBuildGrid();
 renderChecklist();
-$('metaInput').value=meta.toLocaleString('pt-BR');
+$('metaInput').value=meta.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 </script>
 </body>
 </html>
