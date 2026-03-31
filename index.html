@@ -290,6 +290,11 @@ tr:hover td{background:var(--bg3);}
 .g-filter.cat-contato.active{background:#001a30;border-color:var(--blue);color:var(--blue);}
 .g-filter.cat-corrida.active{background:#1a0d00;border-color:var(--orange);color:var(--orange);}
 .g-filter.cat-agente.active{background:#001a10;border-color:var(--green2);color:var(--green);}
+.g-filter.cat-oficina.active{background:#1a0f00;border-color:#f39c12;color:#f39c12;}
+.g-filter.cat-ferro.active{background:#1a0000;border-color:#e74c3c;color:#e74c3c;}
+.g-filter.cat-lava.active{background:#001a15;border-color:#1abc9c;color:#1abc9c;}
+.g-filter.cat-bunker.active{background:#0d0a1a;border-color:#a29bfe;color:#a29bfe;}
+.g-filter.cat-acido.active{background:#1a1500;border-color:#fdcb6e;color:#fdcb6e;}
 .g-add-form{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:16px;margin-bottom:16px;}
 .g-add-title{font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:2px;margin-bottom:12px;}
 .g-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
@@ -493,11 +498,28 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
       </div>
       <div class="g-field">
         <label>Categoria</label>
-        <select id="gCat">
+        <select id="gCat" onchange="gUpdateNomePlaceholder()">
           <option value="heist">Golpe (Heist)</option>
           <option value="contato">Missão de Contato</option>
           <option value="corrida">Corrida / Atividade</option>
           <option value="agente">Contrato do Agente</option>
+          <option value="oficina_contrato">Oficina — Contrato KDJ/60</option>
+          <option value="oficina_cliente">Oficina — Mod. Cliente</option>
+          <option value="oficina_exotico">Oficina — Exportação Exótica</option>
+          <option value="ferro_roubo">Ferro-Velho — Roubo de Carro</option>
+          <option value="ferro_guincho">Ferro-Velho — Serviço de Guincho</option>
+          <option value="ferro_disrupcao">Ferro-Velho — Missão de Disrupção</option>
+          <option value="ferro_venda">Ferro-Velho — Venda/Exportação</option>
+          <option value="lava_lavagem">Lava-Rápido — Lavagem de Dinheiro</option>
+          <option value="lava_servico">Lava-Rápido — Serviço de Veículos</option>
+          <option value="lava_faber">Lava-Rápido — Trabalho do Faber</option>
+          <option value="bunker_venda_local">Bunker — Venda de Armas (Local)</option>
+          <option value="bunker_venda_distancia">Bunker — Venda de Armas (Distância)</option>
+          <option value="bunker_estoque_local">Bunker — Venda de Estoque (Local)</option>
+          <option value="bunker_estoque_distancia">Bunker — Venda de Estoque (Distância)</option>
+          <option value="acido_suprimento">Lab de Ácido — Roubo de Suprimento</option>
+          <option value="acido_venda_local">Lab de Ácido — Venda Local</option>
+          <option value="acido_venda_distancia">Lab de Ácido — Venda à Distância</option>
         </select>
       </div>
       <div class="g-field">
@@ -518,6 +540,11 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
     <div class="g-stat"><div class="g-stat-lbl">Missões</div><div class="g-stat-val" style="color:var(--blue)" id="gTotalContato">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Corridas</div><div class="g-stat-val" style="color:var(--orange)" id="gTotalCorrida">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Contratos</div><div class="g-stat-val" style="color:var(--green)" id="gTotalAgente">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Oficina</div><div class="g-stat-val" style="color:#f39c12" id="gTotalOficina">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Ferro-Velho</div><div class="g-stat-val" style="color:#e74c3c" id="gTotalFerro">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Lava-Rápido</div><div class="g-stat-val" style="color:#1abc9c" id="gTotalLava">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Bunker</div><div class="g-stat-val" style="color:#a29bfe" id="gTotalBunker">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Lab de Ácido</div><div class="g-stat-val" style="color:#fdcb6e" id="gTotalAcido">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Registros</div><div class="g-stat-val green" id="gTotalCount">0</div></div>
   </div>
 
@@ -527,6 +554,11 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
     <button class="g-filter cat-contato" onclick="gSetFilter('contato',this)">Missões</button>
     <button class="g-filter cat-corrida" onclick="gSetFilter('corrida',this)">Corridas</button>
     <button class="g-filter cat-agente" onclick="gSetFilter('agente',this)">Contratos</button>
+    <button class="g-filter cat-oficina" onclick="gSetFilter('oficina',this)">Oficina</button>
+    <button class="g-filter cat-ferro" onclick="gSetFilter('ferro',this)">Ferro-Velho</button>
+    <button class="g-filter cat-lava" onclick="gSetFilter('lava',this)">Lava-Rápido</button>
+    <button class="g-filter cat-bunker" onclick="gSetFilter('bunker',this)">Bunker</button>
+    <button class="g-filter cat-acido" onclick="gSetFilter('acido',this)">Lab de Ácido</button>
   </div>
 
   <div class="g-list" id="gList"></div>
@@ -980,9 +1012,70 @@ function renderExtras(){
 let golpes = load('golpes', []);
 let gFilter = 'todos';
 
-const CAT_LABELS = { heist:'Golpe', contato:'Missão', corrida:'Corrida', agente:'Contrato' };
+const CAT_LABELS = {
+  heist:'Golpe', contato:'Missão', corrida:'Corrida', agente:'Contrato',
+  oficina_contrato:'Oficina — Contrato', oficina_cliente:'Oficina — Cliente', oficina_exotico:'Oficina — Exótico',
+  ferro_roubo:'Ferro — Roubo', ferro_guincho:'Ferro — Guincho',
+  ferro_disrupcao:'Ferro — Disrupção', ferro_venda:'Ferro — Venda',
+  lava_lavagem:'Lava — Lavagem $', lava_servico:'Lava — Serviço', lava_faber:'Lava — Faber',
+  bunker_venda_local:'Bunker — Armas (Local)', bunker_venda_distancia:'Bunker — Armas (Dist.)',
+  bunker_estoque_local:'Bunker — Estoque (Local)', bunker_estoque_distancia:'Bunker — Estoque (Dist.)',
+  acido_suprimento:'Ácido — Suprimento', acido_venda_local:'Ácido — Venda Local', acido_venda_distancia:'Ácido — Venda Dist.',
+};
+
+const CAT_BADGE_STYLE = {
+  heist:            'background:#1a0030;color:#c39bd3;border:1px solid #4a1070;',
+  contato:          'background:var(--blue-dk);color:var(--blue);border:1px solid #1a3a6c;',
+  corrida:          'background:#1a0d00;color:var(--orange);border:1px solid #3a1a00;',
+  agente:           'background:var(--green-dk);color:var(--green2);border:1px solid #004a1a;',
+  oficina_contrato: 'background:#1a0f00;color:#f39c12;border:1px solid #3a2000;',
+  oficina_cliente:  'background:#1a0f00;color:#e67e22;border:1px solid #3a2000;',
+  oficina_exotico:  'background:#1a0f00;color:#f0b27a;border:1px solid #3a2000;',
+  ferro_roubo:      'background:#1a0000;color:#e74c3c;border:1px solid #3a0000;',
+  ferro_guincho:    'background:#1a0000;color:#c0392b;border:1px solid #3a0000;',
+  ferro_disrupcao:  'background:#1a0000;color:#e57373;border:1px solid #3a0000;',
+  ferro_venda:      'background:#1a0000;color:#ff8a80;border:1px solid #3a0000;',
+  lava_lavagem:     'background:#001a15;color:#1abc9c;border:1px solid #0a4a3a;',
+  lava_servico:     'background:#001a15;color:#48c9b0;border:1px solid #0a4a3a;',
+  lava_faber:       'background:#001a15;color:#76d7c4;border:1px solid #0a4a3a;',
+  bunker_venda_local:      'background:#0d0a1a;color:#a29bfe;border:1px solid #2d2060;',
+  bunker_venda_distancia:  'background:#0d0a1a;color:#c7b8ff;border:1px solid #2d2060;',
+  bunker_estoque_local:    'background:#0d0a1a;color:#9c88ff;border:1px solid #2d2060;',
+  bunker_estoque_distancia:'background:#0d0a1a;color:#b8a9ff;border:1px solid #2d2060;',
+  acido_suprimento:        'background:#1a1500;color:#fdcb6e;border:1px solid #4a3800;',
+  acido_venda_local:       'background:#1a1500;color:#ffeaa7;border:1px solid #4a3800;',
+  acido_venda_distancia:   'background:#1a1500;color:#f9ca24;border:1px solid #4a3800;',
+};
+
+const CAT_PLACEHOLDERS = {
+  heist:'ex: Cayo Perico, Doomsday...', contato:'ex: Missão Simeon...',
+  corrida:'ex: Corrida Stunt...', agente:'ex: Série A...',
+  oficina_contrato:'ex: Union Depository, Primo Taglio...',
+  oficina_cliente:'ex: Modificação cliente #3',
+  oficina_exotico:'ex: Lista exótica completa',
+  ferro_roubo:'ex: Contrato — Roubo Carro #2',
+  ferro_guincho:'ex: Guincho — Sedã esportivo',
+  ferro_disrupcao:'ex: Disrupção pré-roubo',
+  ferro_venda:'ex: Entrega ao comprador — sem danos',
+  lava_lavagem:'ex: Lavagem de dinheiro — lote #3',
+  lava_servico:'ex: Serviço de detalhamento completo',
+  lava_faber:'ex: Trabalho Faber — entrega noturna',
+  bunker_venda_local:'ex: Venda local — 1 veículo',
+  bunker_venda_distancia:'ex: Venda distância — Chumash',
+  bunker_estoque_local:'ex: Estoque cheio — entrega local',
+  bunker_estoque_distancia:'ex: Estoque cheio — entrega distância',
+  acido_suprimento:'ex: Roubo suprimento — aeroporto',
+  acido_venda_local:'ex: Entrega local — bairro próximo',
+  acido_venda_distancia:'ex: Entrega distância — Sandy Shores',
+};
+
+function gUpdateNomePlaceholder(){
+  const cat = $('gCat').value;
+  $('gNome').placeholder = CAT_PLACEHOLDERS[cat] || 'Nome da atividade';
+}
 
 $('gData').value = new Date().toISOString().slice(0,10);
+gUpdateNomePlaceholder();
 
 function addGolpe(){
   const data  = $('gData').value || new Date().toISOString().slice(0,10);
@@ -1016,36 +1109,96 @@ function gSetFilter(f, btn){
 }
 
 function renderGolpes(){
-  const filtered = gFilter==='todos' ? golpes : golpes.filter(g=>g.cat===gFilter);
+  const filtered = gFilter==='todos' ? golpes
+    : gFilter==='oficina' ? golpes.filter(g=>g.cat.startsWith('oficina'))
+    : gFilter==='ferro'   ? golpes.filter(g=>g.cat.startsWith('ferro'))
+    : gFilter==='lava'    ? golpes.filter(g=>g.cat.startsWith('lava'))
+    : gFilter==='bunker'  ? golpes.filter(g=>g.cat.startsWith('bunker'))
+    : gFilter==='acido'   ? golpes.filter(g=>g.cat.startsWith('acido'))
+    : golpes.filter(g=>g.cat===gFilter);
   const list = $('gList'), empty = $('gEmpty');
 
-  // stats
-  const tots = { heist:0, contato:0, corrida:0, agente:0 };
-  golpes.forEach(g=>{ tots[g.cat]=(tots[g.cat]||0)+g.valor; });
+  const tots = { heist:0, contato:0, corrida:0, agente:0, oficina:0, ferro:0, lava:0, bunker:0, acido:0 };
+  golpes.forEach(g=>{
+    const key = g.cat.startsWith('oficina') ? 'oficina'
+              : g.cat.startsWith('ferro')   ? 'ferro'
+              : g.cat.startsWith('lava')    ? 'lava'
+              : g.cat.startsWith('bunker')  ? 'bunker'
+              : g.cat.startsWith('acido')   ? 'acido'
+              : g.cat;
+    tots[key] = (tots[key]||0) + g.valor;
+  });
   const grand = Object.values(tots).reduce((a,b)=>a+b,0);
   $('gTotalGeral').textContent   = fmtM(grand);
   $('gTotalHeist').textContent   = fmtM(tots.heist);
   $('gTotalContato').textContent = fmtM(tots.contato);
   $('gTotalCorrida').textContent = fmtM(tots.corrida);
   $('gTotalAgente').textContent  = fmtM(tots.agente);
+  $('gTotalOficina').textContent = fmtM(tots.oficina);
+  $('gTotalFerro').textContent   = fmtM(tots.ferro);
+  $('gTotalLava').textContent    = fmtM(tots.lava);
+  $('gTotalBunker').textContent  = fmtM(tots.bunker);
+  $('gTotalAcido').textContent   = fmtM(tots.acido);
   $('gTotalCount').textContent   = golpes.length;
 
   if(filtered.length===0){ list.innerHTML=''; empty.style.display='block'; return; }
   empty.style.display='none';
 
-  // find original indices for delete
   list.innerHTML = filtered.map(g=>{
     const origIdx = golpes.indexOf(g);
-    return `<div class="g-item">
-      <span class="g-cat-badge badge-${g.cat}">${CAT_LABELS[g.cat]}</span>
+    const style = CAT_BADGE_STYLE[g.cat] || '';
+    const label = CAT_LABELS[g.cat] || g.cat;
+    const isEditing = g._editing;
+    return `<div class="g-item" id="gitem-${origIdx}">
+      <span class="g-cat-badge" style="${style}">${label}</span>
       <div class="g-item-info">
-        <div class="g-item-name">${g.nome}</div>
-        <div class="g-item-meta">${g.data}</div>
+        ${isEditing
+          ? `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+               <input id="gedit-nome-${origIdx}" type="text" value="${g.nome}"
+                 style="flex:1;min-width:120px;padding:5px 8px;font-size:13px;font-family:var(--mono);
+                        background:var(--bg4);border:1px solid var(--green2);border-radius:4px;color:var(--green);outline:none;" />
+               <input id="gedit-valor-${origIdx}" type="number" value="${g.valor}"
+                 style="width:110px;padding:5px 8px;font-size:13px;font-family:var(--mono);
+                        background:var(--bg4);border:1px solid var(--green2);border-radius:4px;color:var(--gold);outline:none;" />
+             </div>`
+          : `<div class="g-item-name">${g.nome}</div>
+             <div class="g-item-meta">${g.data}</div>`
+        }
       </div>
-      <div class="g-item-val">${fmtM(g.valor)}</div>
-      <span class="g-item-delete" onclick="deleteGolpe(${origIdx})">✕</span>
+      ${isEditing
+        ? `<span class="g-item-delete" style="color:var(--green);border:1px solid var(--green2);padding:4px 8px;border-radius:3px;font-size:11px;font-family:var(--font);font-weight:700;letter-spacing:1px;"
+             onclick="saveGolpeEdit(${origIdx})">✓ Salvar</span>
+           <span class="g-item-delete" onclick="cancelGolpeEdit(${origIdx})">✕</span>`
+        : `<div class="g-item-val">${fmtM(g.valor)}</div>
+           <span class="g-item-delete" style="color:var(--muted);font-size:14px;" title="Editar" onclick="startGolpeEdit(${origIdx})">✎</span>
+           <span class="g-item-delete" onclick="deleteGolpe(${origIdx})">✕</span>`
+      }
     </div>`;
   }).join('');
+}
+
+function startGolpeEdit(i){
+  golpes[i]._editing = true;
+  renderGolpes();
+}
+
+function cancelGolpeEdit(i){
+  delete golpes[i]._editing;
+  renderGolpes();
+}
+
+function saveGolpeEdit(i){
+  const novoNome  = ($('gedit-nome-'+i)||{}).value?.trim();
+  const novoValor = parseFloat(($('gedit-valor-'+i)||{}).value) || 0;
+  if(!novoNome){ showNotify('⚠ O nome não pode ficar vazio!'); return; }
+  if(novoValor<=0){ showNotify('⚠ O valor deve ser maior que zero!'); return; }
+  golpes[i].nome  = novoNome;
+  golpes[i].valor = novoValor;
+  delete golpes[i]._editing;
+  save('golpes', golpes);
+  renderGolpes();
+  renderDashboard();
+  showNotify('✓ Entrada atualizada!');
 }
 
 // ══════════════════════════════════════
