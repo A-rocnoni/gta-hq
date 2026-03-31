@@ -295,6 +295,7 @@ tr:hover td{background:var(--bg3);}
 .g-filter.cat-lava.active{background:#001a15;border-color:#1abc9c;color:#1abc9c;}
 .g-filter.cat-bunker.active{background:#0d0a1a;border-color:#a29bfe;color:#a29bfe;}
 .g-filter.cat-acido.active{background:#1a1500;border-color:#fdcb6e;color:#fdcb6e;}
+.g-filter.cat-mc.active{background:#1a0010;border-color:#fd79a8;color:#fd79a8;}
 .g-add-form{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:16px;margin-bottom:16px;}
 .g-add-title{font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:2px;margin-bottom:12px;}
 .g-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
@@ -520,6 +521,31 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
           <option value="acido_suprimento">Lab de Ácido — Roubo de Suprimento</option>
           <option value="acido_venda_local">Lab de Ácido — Venda Local</option>
           <option value="acido_venda_distancia">Lab de Ácido — Venda à Distância</option>
+          <optgroup label="── MC: Cocaína ──">
+            <option value="mc_cocaina_suprimento">MC Cocaína — Suprimento</option>
+            <option value="mc_cocaina_local">MC Cocaína — Venda Local</option>
+            <option value="mc_cocaina_distancia">MC Cocaína — Venda Distância</option>
+          </optgroup>
+          <optgroup label="── MC: Metanfetamina ──">
+            <option value="mc_meta_suprimento">MC Meta — Suprimento</option>
+            <option value="mc_meta_local">MC Meta — Venda Local</option>
+            <option value="mc_meta_distancia">MC Meta — Venda Distância</option>
+          </optgroup>
+          <optgroup label="── MC: Dinheiro Falso ──">
+            <option value="mc_dinheiro_suprimento">MC Dinheiro Falso — Suprimento</option>
+            <option value="mc_dinheiro_local">MC Dinheiro Falso — Venda Local</option>
+            <option value="mc_dinheiro_distancia">MC Dinheiro Falso — Venda Distância</option>
+          </optgroup>
+          <optgroup label="── MC: Maconha ──">
+            <option value="mc_maconha_suprimento">MC Maconha — Suprimento</option>
+            <option value="mc_maconha_local">MC Maconha — Venda Local</option>
+            <option value="mc_maconha_distancia">MC Maconha — Venda Distância</option>
+          </optgroup>
+          <optgroup label="── MC: Documentos Falsos ──">
+            <option value="mc_docs_suprimento">MC Docs Falsos — Suprimento</option>
+            <option value="mc_docs_local">MC Docs Falsos — Venda Local</option>
+            <option value="mc_docs_distancia">MC Docs Falsos — Venda Distância</option>
+          </optgroup>
         </select>
       </div>
       <div class="g-field">
@@ -545,6 +571,7 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
     <div class="g-stat"><div class="g-stat-lbl">Lava-Rápido</div><div class="g-stat-val" style="color:#1abc9c" id="gTotalLava">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Bunker</div><div class="g-stat-val" style="color:#a29bfe" id="gTotalBunker">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Lab de Ácido</div><div class="g-stat-val" style="color:#fdcb6e" id="gTotalAcido">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Motoclube</div><div class="g-stat-val" style="color:#fd79a8" id="gTotalMC">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Registros</div><div class="g-stat-val green" id="gTotalCount">0</div></div>
   </div>
 
@@ -558,7 +585,8 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
     <button class="g-filter cat-ferro" onclick="gSetFilter('ferro',this)">Ferro-Velho</button>
     <button class="g-filter cat-lava" onclick="gSetFilter('lava',this)">Lava-Rápido</button>
     <button class="g-filter cat-bunker" onclick="gSetFilter('bunker',this)">Bunker</button>
-    <button class="g-filter cat-acido" onclick="gSetFilter('acido',this)">Lab de Ácido</button>
+    <button class="g-filter cat-acido" onclick="gSetFilter('acido',this)">Lab Ácido</button>
+    <button class="g-filter cat-mc" onclick="gSetFilter('mc',this)">Motoclube</button>
   </div>
 
   <div class="g-list" id="gList"></div>
@@ -1021,6 +1049,11 @@ const CAT_LABELS = {
   bunker_venda_local:'Bunker — Armas (Local)', bunker_venda_distancia:'Bunker — Armas (Dist.)',
   bunker_estoque_local:'Bunker — Estoque (Local)', bunker_estoque_distancia:'Bunker — Estoque (Dist.)',
   acido_suprimento:'Ácido — Suprimento', acido_venda_local:'Ácido — Venda Local', acido_venda_distancia:'Ácido — Venda Dist.',
+  mc_cocaina_suprimento:'MC Cocaína — Suprimento', mc_cocaina_local:'MC Cocaína — Local', mc_cocaina_distancia:'MC Cocaína — Dist.',
+  mc_meta_suprimento:'MC Meta — Suprimento', mc_meta_local:'MC Meta — Local', mc_meta_distancia:'MC Meta — Dist.',
+  mc_dinheiro_suprimento:'MC Din.Falso — Suprimento', mc_dinheiro_local:'MC Din.Falso — Local', mc_dinheiro_distancia:'MC Din.Falso — Dist.',
+  mc_maconha_suprimento:'MC Maconha — Suprimento', mc_maconha_local:'MC Maconha — Local', mc_maconha_distancia:'MC Maconha — Dist.',
+  mc_docs_suprimento:'MC Docs — Suprimento', mc_docs_local:'MC Docs — Local', mc_docs_distancia:'MC Docs — Dist.',
 };
 
 const CAT_BADGE_STYLE = {
@@ -1045,6 +1078,21 @@ const CAT_BADGE_STYLE = {
   acido_suprimento:        'background:#1a1500;color:#fdcb6e;border:1px solid #4a3800;',
   acido_venda_local:       'background:#1a1500;color:#ffeaa7;border:1px solid #4a3800;',
   acido_venda_distancia:   'background:#1a1500;color:#f9ca24;border:1px solid #4a3800;',
+  mc_cocaina_suprimento:   'background:#1a0010;color:#fd79a8;border:1px solid #4a0030;',
+  mc_cocaina_local:        'background:#1a0010;color:#ff9ec4;border:1px solid #4a0030;',
+  mc_cocaina_distancia:    'background:#1a0010;color:#ffb8d1;border:1px solid #4a0030;',
+  mc_meta_suprimento:      'background:#1a0010;color:#e84393;border:1px solid #4a0030;',
+  mc_meta_local:           'background:#1a0010;color:#f06eb0;border:1px solid #4a0030;',
+  mc_meta_distancia:       'background:#1a0010;color:#f898c4;border:1px solid #4a0030;',
+  mc_dinheiro_suprimento:  'background:#1a0010;color:#d63082;border:1px solid #4a0030;',
+  mc_dinheiro_local:       'background:#1a0010;color:#e0529e;border:1px solid #4a0030;',
+  mc_dinheiro_distancia:   'background:#1a0010;color:#ea76b8;border:1px solid #4a0030;',
+  mc_maconha_suprimento:   'background:#1a0010;color:#c0266e;border:1px solid #4a0030;',
+  mc_maconha_local:        'background:#1a0010;color:#cc4485;border:1px solid #4a0030;',
+  mc_maconha_distancia:    'background:#1a0010;color:#d8629c;border:1px solid #4a0030;',
+  mc_docs_suprimento:      'background:#1a0010;color:#a01c58;border:1px solid #4a0030;',
+  mc_docs_local:           'background:#1a0010;color:#b03070;border:1px solid #4a0030;',
+  mc_docs_distancia:       'background:#1a0010;color:#c04488;border:1px solid #4a0030;',
 };
 
 const CAT_PLACEHOLDERS = {
@@ -1067,6 +1115,21 @@ const CAT_PLACEHOLDERS = {
   acido_suprimento:'ex: Roubo suprimento — aeroporto',
   acido_venda_local:'ex: Entrega local — bairro próximo',
   acido_venda_distancia:'ex: Entrega distância — Sandy Shores',
+  mc_cocaina_suprimento:'ex: Suprimento cocaína — lote #2',
+  mc_cocaina_local:'ex: Venda cocaína — entrega local',
+  mc_cocaina_distancia:'ex: Venda cocaína — entrega distância',
+  mc_meta_suprimento:'ex: Suprimento meta — laboratório',
+  mc_meta_local:'ex: Venda meta — entrega local',
+  mc_meta_distancia:'ex: Venda meta — entrega distância',
+  mc_dinheiro_suprimento:'ex: Suprimento dinheiro falso',
+  mc_dinheiro_local:'ex: Venda dinheiro falso — local',
+  mc_dinheiro_distancia:'ex: Venda dinheiro falso — dist.',
+  mc_maconha_suprimento:'ex: Suprimento maconha — fazenda',
+  mc_maconha_local:'ex: Venda maconha — entrega local',
+  mc_maconha_distancia:'ex: Venda maconha — entrega dist.',
+  mc_docs_suprimento:'ex: Suprimento docs falsos',
+  mc_docs_local:'ex: Venda docs falsos — local',
+  mc_docs_distancia:'ex: Venda docs falsos — distância',
 };
 
 function gUpdateNomePlaceholder(){
@@ -1115,16 +1178,18 @@ function renderGolpes(){
     : gFilter==='lava'    ? golpes.filter(g=>g.cat.startsWith('lava'))
     : gFilter==='bunker'  ? golpes.filter(g=>g.cat.startsWith('bunker'))
     : gFilter==='acido'   ? golpes.filter(g=>g.cat.startsWith('acido'))
+    : gFilter==='mc'      ? golpes.filter(g=>g.cat.startsWith('mc'))
     : golpes.filter(g=>g.cat===gFilter);
   const list = $('gList'), empty = $('gEmpty');
 
-  const tots = { heist:0, contato:0, corrida:0, agente:0, oficina:0, ferro:0, lava:0, bunker:0, acido:0 };
+  const tots = { heist:0, contato:0, corrida:0, agente:0, oficina:0, ferro:0, lava:0, bunker:0, acido:0, mc:0 };
   golpes.forEach(g=>{
     const key = g.cat.startsWith('oficina') ? 'oficina'
               : g.cat.startsWith('ferro')   ? 'ferro'
               : g.cat.startsWith('lava')    ? 'lava'
               : g.cat.startsWith('bunker')  ? 'bunker'
               : g.cat.startsWith('acido')   ? 'acido'
+              : g.cat.startsWith('mc')      ? 'mc'
               : g.cat;
     tots[key] = (tots[key]||0) + g.valor;
   });
@@ -1139,6 +1204,7 @@ function renderGolpes(){
   $('gTotalLava').textContent    = fmtM(tots.lava);
   $('gTotalBunker').textContent  = fmtM(tots.bunker);
   $('gTotalAcido').textContent   = fmtM(tots.acido);
+  $('gTotalMC').textContent      = fmtM(tots.mc);
   $('gTotalCount').textContent   = golpes.length;
 
   if(filtered.length===0){ list.innerHTML=''; empty.style.display='block'; return; }
