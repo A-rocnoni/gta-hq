@@ -432,6 +432,24 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
     <button class="l-btn" style="border-color:#3a0000;color:#ff6b6b;" onclick="clearLucros()">✕ Limpar tudo</button>
   </div>
 
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:14px 16px;margin-bottom:14px;">
+    <div style="font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:2px;margin-bottom:10px;">// FILTRAR POR DATA</div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <label style="font-size:11px;font-family:var(--mono);color:var(--muted);">DE</label>
+        <input type="date" id="filtroInicio" oninput="renderLucrosTable()"
+          style="padding:6px 10px;font-size:12px;font-family:var(--mono);background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--green);outline:none;" />
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <label style="font-size:11px;font-family:var(--mono);color:var(--muted);">ATÉ</label>
+        <input type="date" id="filtroFim" oninput="renderLucrosTable()"
+          style="padding:6px 10px;font-size:12px;font-family:var(--mono);background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--green);outline:none;" />
+      </div>
+      <button class="l-btn" onclick="limparFiltroData()">✕ Limpar filtro</button>
+      <span id="filtroInfo" style="font-size:11px;font-family:var(--mono);color:var(--muted);"></span>
+    </div>
+  </div>
+
   <div class="lucros-table-wrap">
     <table id="lucrosTable">
       <thead>
@@ -737,22 +755,56 @@ function exportCSV(){
   a.download='gta_lucros.csv'; a.click();
 }
 
+function limparFiltroData(){
+  $('filtroInicio').value = '';
+  $('filtroFim').value = '';
+  renderLucrosTable();
+}
+
 function renderLucrosTable(){
   const body=$('lucrosBody'), foot=$('lucrosFoot');
   const empty=$('lucrosEmpty');
+  const inicio = $('filtroInicio')?.value || '';
+  const fim    = $('filtroFim')?.value || '';
+
+  const filtrados = lucros.filter((r,_) => {
+    if(inicio && r.data < inicio) return false;
+    if(fim    && r.data > fim)    return false;
+    return true;
+  });
+
+  const info = $('filtroInfo');
+  if(info){
+    if(inicio || fim){
+      info.textContent = filtrados.length+' registro(s) encontrado(s)';
+      info.style.color = 'var(--green)';
+    } else {
+      info.textContent = '';
+    }
+  }
+
   if(lucros.length===0){ body.innerHTML=''; foot.innerHTML=''; empty.style.display='block'; return; }
   empty.style.display='none';
-  body.innerHTML = lucros.map((r,i)=>`
-    <tr>
+
+  if(filtrados.length===0){
+    body.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:24px;font-family:var(--mono);color:var(--muted);font-size:12px;">Nenhum registro no período selecionado.</td></tr>`;
+    foot.innerHTML='';
+    return;
+  }
+
+  body.innerHTML = filtrados.map((r)=>{
+    const origIdx = lucros.indexOf(r);
+    return `<tr>
       <td class="td-dia">${r.data}</td>
       ${r.vals.map(v=>`<td>${v>0?fmtM(v):'-'}</td>`).join('')}
       <td class="td-total">${fmtM(r.total)}</td>
-      <td class="td-delete" onclick="deleteLucro(${i})">✕</td>
-    </tr>
-  `).join('');
-  const totals = FONTES.map((_,i)=>lucros.reduce((a,r)=>a+(r.vals[i]||0),0));
+      <td class="td-delete" onclick="deleteLucro(${origIdx})">✕</td>
+    </tr>`;
+  }).join('');
+
+  const totals = FONTES.map((_,i)=>filtrados.reduce((a,r)=>a+(r.vals[i]||0),0));
   const grand  = totals.reduce((a,b)=>a+b,0);
-  foot.innerHTML=`<tr class="tfoot-row"><td>TOTAL</td>${totals.map(v=>`<td>${fmtM(v)}</td>`).join('')}<td class="td-total">${fmtM(grand)}</td><td></td></tr>`;
+  foot.innerHTML=`<tr class="tfoot-row"><td>TOTAL${inicio||fim?' (filtrado)':''}</td>${totals.map(v=>`<td>${fmtM(v)}</td>`).join('')}<td class="td-total">${fmtM(grand)}</td><td></td></tr>`;
 }
 
 // ══════════════════════════════════════
