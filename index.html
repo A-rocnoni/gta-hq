@@ -389,7 +389,7 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
         <div style="font-size:16px;font-weight:700;color:var(--gold);font-family:var(--mono);" id="saldoInicial">R$ 0,00</div>
       </div>
       <div style="text-align:center;">
-        <div style="font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:4px;">GANHOU HOJE</div>
+        <div style="font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:4px;">GANHOU DEPOIS</div>
         <div style="font-size:16px;font-weight:700;color:var(--green);font-family:var(--mono);" id="saldoGanhouHoje">R$ 0,00</div>
       </div>
       <div style="text-align:center;">
@@ -397,8 +397,9 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
         <div style="font-size:20px;font-weight:700;color:var(--white);font-family:var(--mono);" id="saldoAtual">R$ 0,00</div>
       </div>
     </div>
-    <div style="margin-top:10px;text-align:right;">
-      <span onclick="resetSaldo()" style="font-size:10px;font-family:var(--mono);color:var(--muted);cursor:pointer;letter-spacing:1px;">↺ Resetar saldo da sessão</span>
+    <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
+      <span id="saldoTs" style="font-size:10px;font-family:var(--mono);color:var(--muted2);letter-spacing:1px;"></span>
+      <span onclick="resetSaldo()" style="font-size:10px;font-family:var(--mono);color:var(--muted);cursor:pointer;letter-spacing:1px;">↺ Resetar saldo</span>
     </div>
   </div>
 
@@ -1029,7 +1030,7 @@ function addLucro(){
   ];
   const total = vals.reduce((a,b)=>a+b,0);
   if(total===0){ showNotify('⚠ Digite pelo menos um valor!'); return; }
-  lucros.push({ data, vals, total });
+  lucros.push({ data, vals, total, _ts: new Date().toISOString() });
   lucros.sort((a,b)=>a.data.localeCompare(b.data));
   save('lucros', lucros);
   ['addBoate','addBunker','addCarros','addOficina','addFerro','addCocaina','addMeta'].forEach(id=>{ const el=$(id); if(el) el.value=''; });
@@ -1361,7 +1362,7 @@ function addExtra(){
   const valor = parseFloat($('exValor').value) || 0;
   if(!desc){ showNotify('⚠ Digite uma descrição!'); return; }
   if(valor<=0){ showNotify('⚠ Digite um valor maior que zero!'); return; }
-  extras.push({ data, desc, valor });
+  extras.push({ data, desc, valor, _ts: new Date().toISOString() });
   extras.sort((a,b)=>b.data.localeCompare(a.data));
   save('extras', extras);
   $('exDesc').value = '';
@@ -1639,7 +1640,7 @@ function addGolpe(){
   const valor = parseFloat($('gValor').value) || 0;
   if(!nome){ showNotify('⚠ Digite o nome da atividade!'); return; }
   if(valor<=0){ showNotify('⚠ Digite um valor maior que zero!'); return; }
-  golpes.push({ data, cat, nome, valor });
+  golpes.push({ data, cat, nome, valor, _ts: new Date().toISOString() });
   golpes.sort((a,b)=>b.data.localeCompare(a.data));
   save('golpes', golpes);
   $('gNome').value = '';
@@ -1802,17 +1803,19 @@ function saveGolpeEdit(i){
 // SALDO DA SESSÃO
 // ══════════════════════════════════════
 let saldoInicial = load('saldoSessao', 0);
-let saldoTimestamp = load('saldoTimestamp', null);
+let saldoTimestamp = load('saldoTimestamp', null); // ISO string de quando foi definido
 
 function updateSaldo(el){
   saldoInicial = parseVal(el.value);
+  saldoTimestamp = new Date().toISOString();
   save('saldoSessao', saldoInicial);
-  save('saldoTimestamp', new Date().toISOString());
+  save('saldoTimestamp', saldoTimestamp);
   renderSaldo();
 }
 
 function resetSaldo(){
   saldoInicial = 0;
+  saldoTimestamp = null;
   save('saldoSessao', 0);
   save('saldoTimestamp', null);
   $('saldoInput').value = '0,00';
@@ -1820,25 +1823,39 @@ function resetSaldo(){
 }
 
 function renderSaldo(){
-  const hoje = getGTADate();
-  const ganhouHoje = lucros
-    .filter(r => r.data === hoje)
-    .reduce((a,r) => a + r.total, 0)
-    + extras
-    .filter(e => e.data === hoje)
-    .reduce((a,e) => a + e.valor, 0)
-    + golpes
-    .filter(g => g.data === hoje)
-    .reduce((a,g) => a + g.valor, 0);
+  // Só soma entradas registradas APÓS o saldo ter sido definido
+  const ts = saldoTimestamp ? new Date(saldoTimestamp) : null;
 
-  const saldoAtual = saldoInicial + ganhouHoje;
+  function somaSobreTS(arr, getVal){
+    if(!ts) return 0;
+    return arr
+      .filter(r => r._ts && new Date(r._ts) > ts)
+      .reduce((a,r) => a + getVal(r), 0);
+  }
 
-  $('saldoInicial').textContent  = fmtM(saldoInicial);
-  $('saldoInicial').title        = fmtMFull(saldoInicial);
-  $('saldoGanhouHoje').textContent = fmtM(ganhouHoje);
-  $('saldoGanhouHoje').title       = fmtMFull(ganhouHoje);
-  $('saldoAtual').textContent    = fmtM(saldoAtual);
-  $('saldoAtual').title          = fmtMFull(saldoAtual);
+  const ganhouDepois =
+    somaSobreTS(lucros, r => r.total) +
+    somaSobreTS(extras, e => e.valor) +
+    somaSobreTS(golpes, g => g.valor);
+
+  const saldoAtualVal = saldoInicial + ganhouDepois;
+
+  $('saldoInicial').textContent    = fmtM(saldoInicial);
+  $('saldoInicial').title          = fmtMFull(saldoInicial);
+  $('saldoGanhouHoje').textContent = fmtM(ganhouDepois);
+  $('saldoGanhouHoje').title       = fmtMFull(ganhouDepois);
+  $('saldoAtual').textContent      = fmtM(saldoAtualVal);
+  $('saldoAtual').title            = fmtMFull(saldoAtualVal);
+
+  const tsEl = $('saldoTs');
+  if(tsEl){
+    if(ts){
+      const d = ts;
+      tsEl.textContent = 'Atualizado às '+pad(d.getHours())+':'+pad(d.getMinutes())+' de '+d.toLocaleDateString('pt-BR');
+    } else {
+      tsEl.textContent = 'Nenhum saldo definido ainda';
+    }
+  }
 }
 
 // ══════════════════════════════════════
