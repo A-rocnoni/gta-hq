@@ -370,6 +370,38 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
     <div class="sec-sub">Acompanhe seu progresso para a meta</div>
   </div>
 
+  <!-- SALDO INICIAL -->
+  <div class="meta-card" style="margin-bottom:12px;border-color:var(--gold2);">
+    <div class="meta-top">
+      <div>
+        <div class="meta-label" style="color:var(--gold);">💰 Saldo ao entrar no jogo</div>
+        <div style="font-size:10px;font-family:var(--mono);color:var(--muted);margin-top:2px;">Digite seu saldo atual toda vez que abrir o GTA</div>
+      </div>
+      <div class="meta-edit">
+        <label style="color:var(--gold);">R$</label>
+        <input type="text" id="saldoInput" value="0,00" oninput="updateSaldo(this)"
+          style="border-color:var(--gold2);color:var(--gold);" />
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;">
+      <div style="text-align:center;">
+        <div style="font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:4px;">SALDO INICIAL</div>
+        <div style="font-size:16px;font-weight:700;color:var(--gold);font-family:var(--mono);" id="saldoInicial">R$ 0,00</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:4px;">GANHOU HOJE</div>
+        <div style="font-size:16px;font-weight:700;color:var(--green);font-family:var(--mono);" id="saldoGanhouHoje">R$ 0,00</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:4px;">SALDO ATUAL</div>
+        <div style="font-size:20px;font-weight:700;color:var(--white);font-family:var(--mono);" id="saldoAtual">R$ 0,00</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;text-align:right;">
+      <span onclick="resetSaldo()" style="font-size:10px;font-family:var(--mono);color:var(--muted);cursor:pointer;letter-spacing:1px;">↺ Resetar saldo da sessão</span>
+    </div>
+  </div>
+
   <div class="meta-card">
     <div class="meta-top">
       <div class="meta-label">Meta de lucro</div>
@@ -971,6 +1003,7 @@ function addLucro(){
   ['addBoate','addBunker','addCarros','addOficina','addFerro','addCocaina','addMeta'].forEach(id=>{ const el=$(id); if(el) el.value=''; });
   renderLucrosTable();
   renderDashboard();
+  renderSaldo();
   showNotify('✓ Entrada adicionada!');
 }
 
@@ -1304,6 +1337,7 @@ function addExtra(){
   $('exValor').value = '';
   renderExtras();
   renderDashboard();
+  renderSaldo();
   showNotify('✓ Valor avulso adicionado!');
 }
 
@@ -1581,6 +1615,7 @@ function addGolpe(){
   $('gValor').value = '';
   renderGolpes();
   renderDashboard();
+  renderSaldo();
   showNotify('✓ '+CAT_LABELS[cat]+' registrado!');
 }
 
@@ -1733,6 +1768,48 @@ function saveGolpeEdit(i){
 }
 
 // ══════════════════════════════════════
+// SALDO DA SESSÃO
+// ══════════════════════════════════════
+let saldoInicial = load('saldoSessao', 0);
+let saldoTimestamp = load('saldoTimestamp', null);
+
+function updateSaldo(el){
+  const raw = el.value.replace(/[^0-9,\.]/g,'').replace(',','.');
+  saldoInicial = parseFloat(raw)||0;
+  save('saldoSessao', saldoInicial);
+  save('saldoTimestamp', new Date().toISOString());
+  renderSaldo();
+}
+
+function resetSaldo(){
+  saldoInicial = 0;
+  save('saldoSessao', 0);
+  save('saldoTimestamp', null);
+  $('saldoInput').value = '0,00';
+  renderSaldo();
+}
+
+function renderSaldo(){
+  // Lucros de hoje
+  const hoje = getGTADate();
+  const ganhouHoje = lucros
+    .filter(r => r.data === hoje)
+    .reduce((a,r) => a + r.total, 0)
+    + extras
+    .filter(e => e.data === hoje)
+    .reduce((a,e) => a + e.valor, 0)
+    + golpes
+    .filter(g => g.data === hoje)
+    .reduce((a,g) => a + g.valor, 0);
+
+  const saldoAtual = saldoInicial + ganhouHoje;
+
+  $('saldoInicial').textContent = fmtM(saldoInicial);
+  $('saldoGanhouHoje').textContent = fmtM(ganhouHoje);
+  $('saldoAtual').textContent = fmtM(saldoAtual);
+}
+
+// ══════════════════════════════════════
 // INIT
 // ══════════════════════════════════════
 renderLucrosTable();
@@ -1742,6 +1819,8 @@ renderGolpes();
 tBuildGrid();
 renderChecklist();
 $('metaInput').value=meta.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+$('saldoInput').value=saldoInicial.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+renderSaldo();
 </script>
 </body>
 </html>
