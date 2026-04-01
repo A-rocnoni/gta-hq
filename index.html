@@ -380,7 +380,7 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
       <div class="meta-edit">
         <label style="color:var(--gold);">R$</label>
         <input type="text" id="saldoInput" value="0,00" oninput="updateSaldo(this)"
-          style="border-color:var(--gold2);color:var(--gold);" />
+          style="border-color:var(--gold2);color:var(--gold);" placeholder="ex: 1.5bi ou 500mi" />
       </div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;">
@@ -407,7 +407,7 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
       <div class="meta-label">Meta de lucro</div>
       <div class="meta-edit">
         <label>R$</label>
-        <input type="text" id="metaInput" value="10.000.000" oninput="updateMeta(this)" />
+        <input type="text" id="metaInput" value="10.000.000" oninput="updateMeta(this)" placeholder="ex: 1bi ou 500mi" />
       </div>
     </div>
     <div class="progress-section">
@@ -916,8 +916,40 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
 // ══════════════════════════════════════
 const $ = id => document.getElementById(id);
 const pad = n => String(n).padStart(2,'0');
-const fmtM = v => 'R$ '+Number(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 const nowStr = () => { const d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds()); };
+
+// Formata valor em reais com abreviação para valores grandes
+function fmtM(v){
+  const n = Number(v);
+  if(isNaN(n)) return 'R$ 0,00';
+  const abs = Math.abs(n);
+  if(abs >= 1e15) return 'R$ '+(n/1e15).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' quad';
+  if(abs >= 1e12) return 'R$ '+(n/1e12).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' tri';
+  if(abs >= 1e9)  return 'R$ '+(n/1e9).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' bi';
+  if(abs >= 1e6)  return 'R$ '+(n/1e6).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' mi';
+  return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+// Formata valor completo sem abreviação (para tabelas)
+function fmtMFull(v){
+  return 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+// Converte texto digitado em número — aceita: 1.5bi, 500mi, 1tri, 1quad, ou número normal
+function parseVal(str){
+  if(!str) return 0;
+  const s = str.toString().trim().toLowerCase()
+    .replace(/\./g,'').replace(',','.');
+  const match = s.match(/^([\d.]+)\s*(quad|tri|bi|mi)?$/);
+  if(!match) return parseFloat(s)||0;
+  const num = parseFloat(match[1])||0;
+  const suffix = match[2];
+  if(suffix==='quad') return num * 1e15;
+  if(suffix==='tri')  return num * 1e12;
+  if(suffix==='bi')   return num * 1e9;
+  if(suffix==='mi')   return num * 1e6;
+  return num;
+}
 
 function showNotify(msg){
   const el=$('notify');
@@ -1075,8 +1107,8 @@ function renderLucrosTable(){
     const total = vals.reduce((a,b)=>a+b, 0);
     return `<tr>
       <td class="td-dia">${r.data}</td>
-      ${vals.map(v=>`<td>${v>0?fmtM(v):'-'}</td>`).join('')}
-      <td class="td-total">${fmtM(total)}</td>
+      ${vals.map(v=>`<td>${v>0?fmtMFull(v):'-'}</td>`).join('')}
+      <td class="td-total">${fmtMFull(total)}</td>
       <td class="td-delete" onclick="deleteLucro(${origIdx})">✕</td>
     </tr>`;
   }).join('');
@@ -1086,7 +1118,7 @@ function renderLucrosTable(){
     return a+(vals[i]||0);
   },0));
   const grand  = totals.reduce((a,b)=>a+b,0);
-  foot.innerHTML=`<tr class="tfoot-row"><td>TOTAL${inicio||fim?' (filtrado)':''}</td>${totals.map(v=>`<td>${fmtM(v)}</td>`).join('')}<td class="td-total">${fmtM(grand)}</td><td></td></tr>`;
+  foot.innerHTML=`<tr class="tfoot-row"><td>TOTAL${inicio||fim?' (filtrado)':''}</td>${totals.map(v=>`<td>${fmtMFull(v)}</td>`).join('')}<td class="td-total">${fmtMFull(grand)}</td><td></td></tr>`;
 }
 
 // ══════════════════════════════════════
@@ -1095,8 +1127,7 @@ function renderLucrosTable(){
 let meta = load('meta', 10000000);
 
 function updateMeta(el){
-  const raw = el.value.replace(/[^0-9,\.]/g,'').replace(',','.');
-  meta = parseFloat(raw)||0;
+  meta = parseVal(el.value);
   save('meta', meta);
   renderDashboard();
 }
@@ -1147,7 +1178,7 @@ const T_SOURCES = [
 let tTimers={}, tGlobalDur=48*60, tSessionTotal=0, tSessionCollects=0;
 
 const tFmt = s=>pad(Math.floor(Math.abs(s)/60))+':'+pad(Math.abs(s)%60);
-const tFmtM= v=>'R$ '+Number(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+const tFmtM= v=>fmtM(v);
 function tGetVal(id){ return parseFloat(($('tval-'+id)||{}).value?.replace(/[^0-9,]/g,'').replace(',','.')||'0')||0; }
 
 function tAddLog(name,val,type){
@@ -1774,8 +1805,7 @@ let saldoInicial = load('saldoSessao', 0);
 let saldoTimestamp = load('saldoTimestamp', null);
 
 function updateSaldo(el){
-  const raw = el.value.replace(/[^0-9,\.]/g,'').replace(',','.');
-  saldoInicial = parseFloat(raw)||0;
+  saldoInicial = parseVal(el.value);
   save('saldoSessao', saldoInicial);
   save('saldoTimestamp', new Date().toISOString());
   renderSaldo();
@@ -1790,7 +1820,6 @@ function resetSaldo(){
 }
 
 function renderSaldo(){
-  // Lucros de hoje
   const hoje = getGTADate();
   const ganhouHoje = lucros
     .filter(r => r.data === hoje)
@@ -1804,9 +1833,12 @@ function renderSaldo(){
 
   const saldoAtual = saldoInicial + ganhouHoje;
 
-  $('saldoInicial').textContent = fmtM(saldoInicial);
+  $('saldoInicial').textContent  = fmtM(saldoInicial);
+  $('saldoInicial').title        = fmtMFull(saldoInicial);
   $('saldoGanhouHoje').textContent = fmtM(ganhouHoje);
-  $('saldoAtual').textContent = fmtM(saldoAtual);
+  $('saldoGanhouHoje').title       = fmtMFull(ganhouHoje);
+  $('saldoAtual').textContent    = fmtM(saldoAtual);
+  $('saldoAtual').title          = fmtMFull(saldoAtual);
 }
 
 // ══════════════════════════════════════
