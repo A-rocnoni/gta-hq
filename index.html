@@ -287,6 +287,8 @@ tr:hover td{background:var(--bg3);}
 .g-filter:hover{border-color:var(--green);color:var(--green);}
 .g-filter.active{background:var(--green-dk);border-color:var(--green2);color:var(--green);}
 .g-filter.cat-heist.active{background:#1a0030;border-color:#9b59b6;color:#c39bd3;}
+.g-filter.cat-doomsday.active{background:#1a0030;border-color:#ff00ff;color:#ff00ff;}
+.g-filter.cat-cluckin.active{background:#0a1a00;border-color:#7ec850;color:#7ec850;}
 .g-filter.cat-cayo.active{background:#001a12;border-color:#55efc4;color:#55efc4;}
 .g-filter.cat-cassino.active{background:#1a1200;border-color:#fdcb6e;color:#fdcb6e;}
 .g-filter.cat-contato.active{background:#001a30;border-color:var(--blue);color:var(--blue);}
@@ -525,10 +527,22 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
       <div class="g-field">
         <label>Categoria</label>
         <select id="gCat" onchange="gUpdateNomePlaceholder()">
-          <option value="heist">Golpe (Heist)</option>
+          <optgroup label="── Heists Clássicos ──">
+            <option value="heist_fleeca">Heist — Serviço da Fleeca</option>
+            <option value="heist_prisao">Heist — A Fuga da Prisão</option>
+            <option value="heist_humane">Heist — Invasão ao Lab. Humane</option>
+            <option value="heist_serieA">Heist — Financiamento Série A</option>
+            <option value="heist_pacific">Heist — Pacific Standard</option>
+          </optgroup>
+          <optgroup label="── Doomsday Heist ──">
+            <option value="heist_vazamento">Doomsday — O Vazamento de Dados (Ato I)</option>
+            <option value="heist_bogdan">Doomsday — O Problema de Bogdan (Ato II)</option>
+            <option value="heist_juizo">Doomsday — O Golpe do Juízo Final (Ato III)</option>
+          </optgroup>
           <option value="contato">Missão de Contato</option>
           <option value="corrida">Corrida / Atividade</option>
           <option value="agente">Contrato do Agente</option>
+          <option value="cluckin_bell">Contrato — Cluckin' Bell Farm Raid (Vicent)</option>
           <optgroup label="── Cayo Perico ──">
             <option value="cayo_setup">Cayo Perico — Preparação (Setup)</option>
             <option value="cayo_solo">Cayo Perico — Golpe Solo</option>
@@ -616,9 +630,11 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
 
   <div class="g-stats">
     <div class="g-stat"><div class="g-stat-lbl">Total geral</div><div class="g-stat-val gold" id="gTotalGeral">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Heists</div><div class="g-stat-val" style="color:#c39bd3" id="gTotalHeist">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Doomsday</div><div class="g-stat-val" style="color:#ff00ff" id="gTotalDoomsday">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Cayo Perico</div><div class="g-stat-val" style="color:#55efc4" id="gTotalCayo">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Cassino</div><div class="g-stat-val" style="color:#fdcb6e" id="gTotalCassino">R$ 0</div></div>
-    <div class="g-stat"><div class="g-stat-lbl">Golpes</div><div class="g-stat-val" style="color:#c39bd3" id="gTotalHeist">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Cluckin' Bell</div><div class="g-stat-val" style="color:#7ec850" id="gTotalCluckin">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Missões</div><div class="g-stat-val" style="color:var(--blue)" id="gTotalContato">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Corridas</div><div class="g-stat-val" style="color:var(--orange)" id="gTotalCorrida">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Contratos</div><div class="g-stat-val" style="color:var(--green)" id="gTotalAgente">R$ 0</div></div>
@@ -634,9 +650,11 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
 
   <div class="g-filter-row">
     <button class="g-filter active" onclick="gSetFilter('todos',this)">Todos</button>
+    <button class="g-filter cat-heist" onclick="gSetFilter('heist',this)">Heists</button>
+    <button class="g-filter cat-doomsday" onclick="gSetFilter('doomsday',this)">Doomsday</button>
     <button class="g-filter cat-cayo" onclick="gSetFilter('cayo',this)">Cayo Perico</button>
     <button class="g-filter cat-cassino" onclick="gSetFilter('cassino',this)">Cassino</button>
-    <button class="g-filter cat-heist" onclick="gSetFilter('heist',this)">Golpes</button>
+    <button class="g-filter cat-cluckin" onclick="gSetFilter('cluckin_bell',this)">Cluckin' Bell</button>
     <button class="g-filter cat-contato" onclick="gSetFilter('contato',this)">Missões</button>
     <button class="g-filter cat-corrida" onclick="gSetFilter('corrida',this)">Corridas</button>
     <button class="g-filter cat-agente" onclick="gSetFilter('agente',this)">Contratos</button>
@@ -1284,7 +1302,13 @@ let golpes = load('golpes', []);
 let gFilter = 'todos';
 
 const CAT_LABELS = {
-  heist:'Golpe', contato:'Missão', corrida:'Corrida', agente:'Contrato',
+  heist_fleeca:'Heist — Fleeca', heist_prisao:'Heist — Fuga Prisão',
+  heist_humane:'Heist — Lab Humane', heist_serieA:'Heist — Série A',
+  heist_pacific:'Heist — Pacific Standard',
+  heist_vazamento:'Doomsday — Ato I', heist_bogdan:'Doomsday — Ato II',
+  heist_juizo:'Doomsday — Ato III',
+  contato:'Missão de Contato', corrida:'Corrida', agente:'Contrato',
+  cluckin_bell:'Cluckin\' Bell Raid',
   cayo_setup:'Cayo — Setup', cayo_solo:'Cayo — Solo', cayo_equipe:'Cayo — Equipe', cayo_elite:'Cayo — Elite ⭐',
   cassino_setup:'Cassino — Setup', cassino_furtivo:'Cassino — Furtivo', cassino_con:'Cassino — Grande Con', cassino_agressivo:'Cassino — Agressivo',
   oficina_union:'Oficina — Union Depository ⭐', oficina_fleeca:'Oficina — Fleeca Bank',
@@ -1307,10 +1331,18 @@ const CAT_LABELS = {
 };
 
 const CAT_BADGE_STYLE = {
-  heist:            'background:#1a0030;color:#c39bd3;border:1px solid #4a1070;',
+  heist_fleeca:     'background:#1a0030;color:#c39bd3;border:1px solid #4a1070;',
+  heist_prisao:     'background:#1a0030;color:#b388e8;border:1px solid #4a1070;',
+  heist_humane:     'background:#1a0030;color:#a370d8;border:1px solid #4a1070;',
+  heist_serieA:     'background:#1a0030;color:#9b59b6;border:1px solid #4a1070;',
+  heist_pacific:    'background:#1a0030;color:#8e44ad;border:1px solid #4a1070;',
+  heist_vazamento:  'background:#0d001a;color:#e056e0;border:1px solid #5a0060;',
+  heist_bogdan:     'background:#0d001a;color:#d040d0;border:1px solid #5a0060;',
+  heist_juizo:      'background:#0d001a;color:#ff00ff;border:1px solid #5a0060;',
   contato:          'background:var(--blue-dk);color:var(--blue);border:1px solid #1a3a6c;',
   corrida:          'background:#1a0d00;color:var(--orange);border:1px solid #3a1a00;',
   agente:           'background:var(--green-dk);color:var(--green2);border:1px solid #004a1a;',
+  cluckin_bell:     'background:#0a1a00;color:#7ec850;border:1px solid #2a5000;',
   cayo_setup:       'background:#001a12;color:#55efc4;border:1px solid #006644;',
   cayo_solo:        'background:#001a12;color:#00cec9;border:1px solid #006644;',
   cayo_equipe:      'background:#001a12;color:#81ecec;border:1px solid #006644;',
@@ -1366,8 +1398,17 @@ const CAT_BADGE_STYLE = {
 };
 
 const CAT_PLACEHOLDERS = {
-  heist:'ex: Cayo Perico, Doomsday...', contato:'ex: Missão Simeon...',
+  heist_fleeca:'ex: Fleeca — minha parte',
+  heist_prisao:'ex: Fuga da Prisão — piloto',
+  heist_humane:'ex: Lab Humane — EMP',
+  heist_serieA:'ex: Série A — suprimentos',
+  heist_pacific:'ex: Pacific Standard — cofre',
+  heist_vazamento:'ex: Doomsday Ato I — Data Breaches',
+  heist_bogdan:'ex: Doomsday Ato II — submarino',
+  heist_juizo:'ex: Doomsday Ato III — final',
+  contato:'ex: Missão Simeon...',
   corrida:'ex: Corrida Stunt...', agente:'ex: Série A...',
+  cluckin_bell:'ex: Cluckin\' Bell — Vicent, solo',
   cayo_setup:'ex: Setup — Maçarico de Corte',
   cayo_solo:'ex: Cayo solo — Pantera Rosa',
   cayo_equipe:'ex: Cayo equipe 4 — Tequila',
@@ -1467,47 +1508,59 @@ function gSetFilter(f, btn){
   renderGolpes();
 }
 
+function gFilterMatch(g){
+  if(gFilter==='todos')       return true;
+  if(gFilter==='heist')       return g.cat.startsWith('heist_') && !['heist_vazamento','heist_bogdan','heist_juizo'].includes(g.cat);
+  if(gFilter==='doomsday')    return ['heist_vazamento','heist_bogdan','heist_juizo'].includes(g.cat);
+  if(gFilter==='cayo')        return g.cat.startsWith('cayo');
+  if(gFilter==='cassino')     return g.cat.startsWith('cassino');
+  if(gFilter==='cluckin_bell')return g.cat === 'cluckin_bell';
+  if(gFilter==='oficina')     return g.cat.startsWith('oficina');
+  if(gFilter==='ferro')       return g.cat.startsWith('ferro');
+  if(gFilter==='lava')        return g.cat.startsWith('lava');
+  if(gFilter==='bunker')      return g.cat.startsWith('bunker');
+  if(gFilter==='acido')       return g.cat.startsWith('acido');
+  if(gFilter==='mc')          return g.cat.startsWith('mc');
+  if(gFilter==='traf')        return g.cat.startsWith('traf');
+  return g.cat === gFilter;
+}
+
 function renderGolpes(){
-  const filtered = gFilter==='todos' ? golpes
-    : gFilter==='cayo'    ? golpes.filter(g=>g.cat.startsWith('cayo'))
-    : gFilter==='cassino' ? golpes.filter(g=>g.cat.startsWith('cassino'))
-    : gFilter==='oficina' ? golpes.filter(g=>g.cat.startsWith('oficina'))
-    : gFilter==='ferro'   ? golpes.filter(g=>g.cat.startsWith('ferro'))
-    : gFilter==='lava'    ? golpes.filter(g=>g.cat.startsWith('lava'))
-    : gFilter==='bunker'  ? golpes.filter(g=>g.cat.startsWith('bunker'))
-    : gFilter==='acido'   ? golpes.filter(g=>g.cat.startsWith('acido'))
-    : gFilter==='mc'      ? golpes.filter(g=>g.cat.startsWith('mc'))
-    : golpes.filter(g=>g.cat===gFilter);
+  const filtered = golpes.filter(g => gFilterMatch(g));
   const list = $('gList'), empty = $('gEmpty');
 
-  const tots = { cayo:0, cassino:0, heist:0, contato:0, corrida:0, agente:0, oficina:0, ferro:0, lava:0, bunker:0, acido:0, mc:0 };
+  const tots = { heist:0, doomsday:0, cayo:0, cassino:0, heist_outros:0, contato:0, corrida:0, agente:0, cluckin_bell:0, oficina:0, ferro:0, lava:0, bunker:0, acido:0, mc:0 };
   golpes.forEach(g=>{
-    const key = g.cat.startsWith('cayo')    ? 'cayo'
-              : g.cat.startsWith('cassino') ? 'cassino'
-              : g.cat.startsWith('oficina') ? 'oficina'
-              : g.cat.startsWith('ferro')   ? 'ferro'
-              : g.cat.startsWith('lava')    ? 'lava'
-              : g.cat.startsWith('bunker')  ? 'bunker'
-              : g.cat.startsWith('acido')   ? 'acido'
-              : g.cat.startsWith('mc')      ? 'mc'
+    const key = ['heist_vazamento','heist_bogdan','heist_juizo'].includes(g.cat) ? 'doomsday'
+              : g.cat.startsWith('heist_')   ? 'heist'
+              : g.cat.startsWith('cayo')     ? 'cayo'
+              : g.cat.startsWith('cassino')  ? 'cassino'
+              : g.cat.startsWith('oficina')  ? 'oficina'
+              : g.cat.startsWith('ferro')    ? 'ferro'
+              : g.cat.startsWith('lava')     ? 'lava'
+              : g.cat.startsWith('bunker')   ? 'bunker'
+              : g.cat.startsWith('acido')    ? 'acido'
+              : g.cat.startsWith('mc')       ? 'mc'
               : g.cat;
     tots[key] = (tots[key]||0) + g.valor;
   });
   const grand = Object.values(tots).reduce((a,b)=>a+b,0);
-  $('gTotalGeral').textContent   = fmtM(grand);
-  $('gTotalCayo').textContent    = fmtM(tots.cayo);
-  $('gTotalCassino').textContent = fmtM(tots.cassino);
-  $('gTotalHeist').textContent   = fmtM(tots.heist);
-  $('gTotalContato').textContent = fmtM(tots.contato);
-  $('gTotalCorrida').textContent = fmtM(tots.corrida);
-  $('gTotalAgente').textContent  = fmtM(tots.agente);
-  $('gTotalOficina').textContent = fmtM(tots.oficina);
-  $('gTotalFerro').textContent   = fmtM(tots.ferro);
-  $('gTotalLava').textContent    = fmtM(tots.lava);
-  $('gTotalBunker').textContent  = fmtM(tots.bunker);
-  $('gTotalAcido').textContent   = fmtM(tots.acido);
-  $('gTotalMC').textContent      = fmtM(tots.mc);
-  $('gTotalCount').textContent   = golpes.length;
+  $('gTotalGeral').textContent    = fmtM(grand);
+  $('gTotalHeist').textContent    = fmtM(tots.heist);
+  $('gTotalDoomsday').textContent = fmtM(tots.doomsday);
+  $('gTotalCayo').textContent     = fmtM(tots.cayo);
+  $('gTotalCassino').textContent  = fmtM(tots.cassino);
+  $('gTotalContato').textContent  = fmtM(tots.contato);
+  $('gTotalCorrida').textContent  = fmtM(tots.corrida);
+  $('gTotalAgente').textContent   = fmtM(tots.agente);
+  $('gTotalCluckin').textContent  = fmtM(tots.cluckin_bell);
+  $('gTotalOficina').textContent  = fmtM(tots.oficina);
+  $('gTotalFerro').textContent    = fmtM(tots.ferro);
+  $('gTotalLava').textContent     = fmtM(tots.lava);
+  $('gTotalBunker').textContent   = fmtM(tots.bunker);
+  $('gTotalAcido').textContent    = fmtM(tots.acido);
+  $('gTotalMC').textContent       = fmtM(tots.mc);
+  $('gTotalCount').textContent    = golpes.length;
 
   if(filtered.length===0){ list.innerHTML=''; empty.style.display='block'; return; }
   empty.style.display='none';
