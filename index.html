@@ -289,6 +289,9 @@ tr:hover td{background:var(--bg3);}
 .g-filter.cat-heist.active{background:#1a0030;border-color:#9b59b6;color:#c39bd3;}
 .g-filter.cat-doomsday.active{background:#1a0030;border-color:#ff00ff;color:#ff00ff;}
 .g-filter.cat-cluckin.active{background:#0a1a00;border-color:#7ec850;color:#7ec850;}
+.g-filter.cat-agencia.active{background:#001530;border-color:#74b9ff;color:#74b9ff;}
+.g-filter.cat-payphone.active{background:#1a0a00;border-color:#ff7675;color:#ff7675;}
+.g-filter.cat-drugwars.active{background:#0d1a00;border-color:#a8e063;color:#a8e063;}
 .g-filter.cat-cayo.active{background:#001a12;border-color:#55efc4;color:#55efc4;}
 .g-filter.cat-cassino.active{background:#1a1200;border-color:#fdcb6e;color:#fdcb6e;}
 .g-filter.cat-contato.active{background:#001a30;border-color:var(--blue);color:var(--blue);}
@@ -543,6 +546,33 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
           <option value="corrida">Corrida / Atividade</option>
           <option value="agente">Contrato do Agente</option>
           <option value="cluckin_bell">Contrato — Cluckin' Bell Farm Raid (Vicent)</option>
+          <optgroup label="── Agência (Franklin) ──">
+            <option value="agencia_security_asset">Agência — Asset Protection</option>
+            <option value="agencia_security_gang">Agência — Gang Termination</option>
+            <option value="agencia_security_liquidize">Agência — Liquidize Assets</option>
+            <option value="agencia_security_rescue">Agência — Rescue Operation</option>
+            <option value="agencia_security_vehicle">Agência — Vehicle Recovery</option>
+            <option value="agencia_dre">Agência — Contrato Dr. Dre ⭐</option>
+          </optgroup>
+          <optgroup label="── Payphone Hits ──">
+            <option value="payphone_ceo">Payphone Hit — The CEO</option>
+            <option value="payphone_cofounder">Payphone Hit — The Cofounder</option>
+            <option value="payphone_hitmen">Payphone Hit — The Hitmen</option>
+            <option value="payphone_dealers">Payphone Hit — The Dealers</option>
+            <option value="payphone_judge">Payphone Hit — The Judge</option>
+            <option value="payphone_popstar">Payphone Hit — The Popstar</option>
+            <option value="payphone_congressman">Payphone Hit — The Congressman</option>
+            <option value="payphone_wife">Payphone Hit — The Wife</option>
+          </optgroup>
+          <optgroup label="── Drug Wars ──">
+            <option value="drugwars_firstdose">Drug Wars — First Dose</option>
+            <option value="drugwars_lastdose">Drug Wars — Last Dose</option>
+            <option value="drugwars_fooligan">Drug Wars — Fooligan Jobs</option>
+          </optgroup>
+          <optgroup label="── Missões de Contato ──">
+            <option value="contato_gerald">Gerald's Last Play</option>
+            <option value="contato_madrazo">Madrazo Dispatch Services</option>
+          </optgroup>
           <optgroup label="── Cayo Perico ──">
             <option value="cayo_setup">Cayo Perico — Preparação (Setup)</option>
             <option value="cayo_solo">Cayo Perico — Golpe Solo</option>
@@ -635,6 +665,9 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
     <div class="g-stat"><div class="g-stat-lbl">Cayo Perico</div><div class="g-stat-val" style="color:#55efc4" id="gTotalCayo">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Cassino</div><div class="g-stat-val" style="color:#fdcb6e" id="gTotalCassino">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Cluckin' Bell</div><div class="g-stat-val" style="color:#7ec850" id="gTotalCluckin">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Agência</div><div class="g-stat-val" style="color:#74b9ff" id="gTotalAgencia">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Payphone Hits</div><div class="g-stat-val" style="color:#ff7675" id="gTotalPayphone">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Drug Wars</div><div class="g-stat-val" style="color:#a8e063" id="gTotalDrugwars">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Missões</div><div class="g-stat-val" style="color:var(--blue)" id="gTotalContato">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Corridas</div><div class="g-stat-val" style="color:var(--orange)" id="gTotalCorrida">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Contratos</div><div class="g-stat-val" style="color:var(--green)" id="gTotalAgente">R$ 0</div></div>
@@ -655,6 +688,9 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
     <button class="g-filter cat-cayo" onclick="gSetFilter('cayo',this)">Cayo Perico</button>
     <button class="g-filter cat-cassino" onclick="gSetFilter('cassino',this)">Cassino</button>
     <button class="g-filter cat-cluckin" onclick="gSetFilter('cluckin_bell',this)">Cluckin' Bell</button>
+    <button class="g-filter cat-agencia" onclick="gSetFilter('agencia',this)">Agência</button>
+    <button class="g-filter cat-payphone" onclick="gSetFilter('payphone',this)">Payphone Hits</button>
+    <button class="g-filter cat-drugwars" onclick="gSetFilter('drugwars',this)">Drug Wars</button>
     <button class="g-filter cat-contato" onclick="gSetFilter('contato',this)">Missões</button>
     <button class="g-filter cat-corrida" onclick="gSetFilter('corrida',this)">Corridas</button>
     <button class="g-filter cat-agente" onclick="gSetFilter('agente',this)">Contratos</button>
@@ -1309,6 +1345,19 @@ const CAT_LABELS = {
   heist_juizo:'Doomsday — Ato III',
   contato:'Missão de Contato', corrida:'Corrida', agente:'Contrato',
   cluckin_bell:'Cluckin\' Bell Raid',
+  agencia_security_asset:'Agência — Asset Protection',
+  agencia_security_gang:'Agência — Gang Termination',
+  agencia_security_liquidize:'Agência — Liquidize Assets',
+  agencia_security_rescue:'Agência — Rescue Operation',
+  agencia_security_vehicle:'Agência — Vehicle Recovery',
+  agencia_dre:'Agência — Dr. Dre ⭐',
+  payphone_ceo:'Payphone — CEO', payphone_cofounder:'Payphone — Cofounder',
+  payphone_hitmen:'Payphone — Hitmen', payphone_dealers:'Payphone — Dealers',
+  payphone_judge:'Payphone — Judge', payphone_popstar:'Payphone — Popstar',
+  payphone_congressman:'Payphone — Congressman', payphone_wife:'Payphone — Wife',
+  drugwars_firstdose:'Drug Wars — First Dose', drugwars_lastdose:'Drug Wars — Last Dose',
+  drugwars_fooligan:'Drug Wars — Fooligan',
+  contato_gerald:'Gerald\'s Last Play', contato_madrazo:'Madrazo Dispatch',
   cayo_setup:'Cayo — Setup', cayo_solo:'Cayo — Solo', cayo_equipe:'Cayo — Equipe', cayo_elite:'Cayo — Elite ⭐',
   cassino_setup:'Cassino — Setup', cassino_furtivo:'Cassino — Furtivo', cassino_con:'Cassino — Grande Con', cassino_agressivo:'Cassino — Agressivo',
   oficina_union:'Oficina — Union Depository ⭐', oficina_fleeca:'Oficina — Fleeca Bank',
@@ -1343,6 +1392,25 @@ const CAT_BADGE_STYLE = {
   corrida:          'background:#1a0d00;color:var(--orange);border:1px solid #3a1a00;',
   agente:           'background:var(--green-dk);color:var(--green2);border:1px solid #004a1a;',
   cluckin_bell:     'background:#0a1a00;color:#7ec850;border:1px solid #2a5000;',
+  agencia_security_asset:    'background:#001530;color:#74b9ff;border:1px solid #003080;',
+  agencia_security_gang:     'background:#001530;color:#74b9ff;border:1px solid #003080;',
+  agencia_security_liquidize:'background:#001530;color:#74b9ff;border:1px solid #003080;',
+  agencia_security_rescue:   'background:#001530;color:#74b9ff;border:1px solid #003080;',
+  agencia_security_vehicle:  'background:#001530;color:#74b9ff;border:1px solid #003080;',
+  agencia_dre:      'background:#001530;color:#ffd700;border:1px solid #806600;',
+  payphone_ceo:       'background:#1a0a00;color:#ff7675;border:1px solid #5a1000;',
+  payphone_cofounder: 'background:#1a0a00;color:#ff7675;border:1px solid #5a1000;',
+  payphone_hitmen:    'background:#1a0a00;color:#ff7675;border:1px solid #5a1000;',
+  payphone_dealers:   'background:#1a0a00;color:#ff7675;border:1px solid #5a1000;',
+  payphone_judge:     'background:#1a0a00;color:#ff7675;border:1px solid #5a1000;',
+  payphone_popstar:   'background:#1a0a00;color:#ff7675;border:1px solid #5a1000;',
+  payphone_congressman:'background:#1a0a00;color:#ff7675;border:1px solid #5a1000;',
+  payphone_wife:      'background:#1a0a00;color:#ff7675;border:1px solid #5a1000;',
+  drugwars_firstdose: 'background:#0d1a00;color:#a8e063;border:1px solid #2a4a00;',
+  drugwars_lastdose:  'background:#0d1a00;color:#a8e063;border:1px solid #2a4a00;',
+  drugwars_fooligan:  'background:#0d1a00;color:#a8e063;border:1px solid #2a4a00;',
+  contato_gerald:     'background:#001a1a;color:#00cec9;border:1px solid #006666;',
+  contato_madrazo:    'background:#001a1a;color:#00cec9;border:1px solid #006666;',
   cayo_setup:       'background:#001a12;color:#55efc4;border:1px solid #006644;',
   cayo_solo:        'background:#001a12;color:#00cec9;border:1px solid #006644;',
   cayo_equipe:      'background:#001a12;color:#81ecec;border:1px solid #006644;',
@@ -1409,6 +1477,25 @@ const CAT_PLACEHOLDERS = {
   contato:'ex: Missão Simeon...',
   corrida:'ex: Corrida Stunt...', agente:'ex: Série A...',
   cluckin_bell:'ex: Cluckin\' Bell — Vicent, solo',
+  agencia_security_asset:'ex: Asset Protection — dificuldade Specialist+',
+  agencia_security_gang:'ex: Gang Termination — Los Santos',
+  agencia_security_liquidize:'ex: Liquidize Assets — entrega completa',
+  agencia_security_rescue:'ex: Rescue Operation — cliente VIP',
+  agencia_security_vehicle:'ex: Vehicle Recovery — sem danos',
+  agencia_dre:'ex: Dr. Dre — contrato completo $1M',
+  payphone_ceo:'ex: Payphone Hit — CEO, bônus +$70k',
+  payphone_cofounder:'ex: Payphone Hit — Cofounder',
+  payphone_hitmen:'ex: Payphone Hit — Hitmen',
+  payphone_dealers:'ex: Payphone Hit — Dealers',
+  payphone_judge:'ex: Payphone Hit — Judge',
+  payphone_popstar:'ex: Payphone Hit — Popstar',
+  payphone_congressman:'ex: Payphone Hit — Congressman',
+  payphone_wife:'ex: Payphone Hit — Wife',
+  drugwars_firstdose:'ex: First Dose — missão 1',
+  drugwars_lastdose:'ex: Last Dose — missão final',
+  drugwars_fooligan:'ex: Fooligan Jobs — série completa',
+  contato_gerald:'ex: Gerald\'s Last Play — missão $',
+  contato_madrazo:'ex: Madrazo Dispatch — corrida entrega',
   cayo_setup:'ex: Setup — Maçarico de Corte',
   cayo_solo:'ex: Cayo solo — Pantera Rosa',
   cayo_equipe:'ex: Cayo equipe 4 — Tequila',
@@ -1515,6 +1602,9 @@ function gFilterMatch(g){
   if(gFilter==='cayo')        return g.cat.startsWith('cayo');
   if(gFilter==='cassino')     return g.cat.startsWith('cassino');
   if(gFilter==='cluckin_bell')return g.cat === 'cluckin_bell';
+  if(gFilter==='agencia')     return g.cat.startsWith('agencia');
+  if(gFilter==='payphone')    return g.cat.startsWith('payphone');
+  if(gFilter==='drugwars')    return g.cat.startsWith('drugwars');
   if(gFilter==='oficina')     return g.cat.startsWith('oficina');
   if(gFilter==='ferro')       return g.cat.startsWith('ferro');
   if(gFilter==='lava')        return g.cat.startsWith('lava');
@@ -1529,18 +1619,24 @@ function renderGolpes(){
   const filtered = golpes.filter(g => gFilterMatch(g));
   const list = $('gList'), empty = $('gEmpty');
 
-  const tots = { heist:0, doomsday:0, cayo:0, cassino:0, heist_outros:0, contato:0, corrida:0, agente:0, cluckin_bell:0, oficina:0, ferro:0, lava:0, bunker:0, acido:0, mc:0 };
+  const tots = { heist:0, doomsday:0, cayo:0, cassino:0, cluckin_bell:0, agencia:0, payphone:0, drugwars:0, contato:0, corrida:0, agente:0, oficina:0, ferro:0, lava:0, bunker:0, acido:0, mc:0, traf:0 };
   golpes.forEach(g=>{
     const key = ['heist_vazamento','heist_bogdan','heist_juizo'].includes(g.cat) ? 'doomsday'
               : g.cat.startsWith('heist_')   ? 'heist'
               : g.cat.startsWith('cayo')     ? 'cayo'
               : g.cat.startsWith('cassino')  ? 'cassino'
+              : g.cat === 'cluckin_bell'     ? 'cluckin_bell'
+              : g.cat.startsWith('agencia')  ? 'agencia'
+              : g.cat.startsWith('payphone') ? 'payphone'
+              : g.cat.startsWith('drugwars') ? 'drugwars'
+              : g.cat.startsWith('contato')  ? 'contato'
               : g.cat.startsWith('oficina')  ? 'oficina'
               : g.cat.startsWith('ferro')    ? 'ferro'
               : g.cat.startsWith('lava')     ? 'lava'
               : g.cat.startsWith('bunker')   ? 'bunker'
               : g.cat.startsWith('acido')    ? 'acido'
               : g.cat.startsWith('mc')       ? 'mc'
+              : g.cat.startsWith('traf')     ? 'traf'
               : g.cat;
     tots[key] = (tots[key]||0) + g.valor;
   });
@@ -1550,6 +1646,10 @@ function renderGolpes(){
   $('gTotalDoomsday').textContent = fmtM(tots.doomsday);
   $('gTotalCayo').textContent     = fmtM(tots.cayo);
   $('gTotalCassino').textContent  = fmtM(tots.cassino);
+  $('gTotalCluckin').textContent  = fmtM(tots.cluckin_bell);
+  $('gTotalAgencia').textContent  = fmtM(tots.agencia);
+  $('gTotalPayphone').textContent = fmtM(tots.payphone);
+  $('gTotalDrugwars').textContent = fmtM(tots.drugwars);
   $('gTotalContato').textContent  = fmtM(tots.contato);
   $('gTotalCorrida').textContent  = fmtM(tots.corrida);
   $('gTotalAgente').textContent   = fmtM(tots.agente);
@@ -1560,6 +1660,7 @@ function renderGolpes(){
   $('gTotalBunker').textContent   = fmtM(tots.bunker);
   $('gTotalAcido').textContent    = fmtM(tots.acido);
   $('gTotalMC').textContent       = fmtM(tots.mc);
+  $('gTotalTraf').textContent     = fmtM(tots.traf);
   $('gTotalCount').textContent    = golpes.length;
 
   if(filtered.length===0){ list.innerHTML=''; empty.style.display='block'; return; }
