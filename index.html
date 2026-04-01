@@ -544,6 +544,17 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
           <option value="oficina_contrato">Oficina — Contrato KDJ/60</option>
           <option value="oficina_cliente">Oficina — Mod. Cliente</option>
           <option value="oficina_exotico">Oficina — Exportação Exótica</option>
+          <optgroup label="── Oficina: Contratos ──">
+            <option value="oficina_union">Oficina — Union Depository ⭐</option>
+            <option value="oficina_fleeca">Oficina — Fleeca Bank</option>
+            <option value="oficina_merryweather">Oficina — Merryweather</option>
+            <option value="oficina_convoy">Oficina — The Convoy</option>
+            <option value="oficina_bolingbroke">Oficina — Bolingbroke</option>
+            <option value="oficina_iaa">Oficina — IAA</option>
+            <option value="oficina_lost">Oficina — The Lost</option>
+            <option value="oficina_superdollar">Oficina — Superdollar</option>
+            <option value="oficina_setup">Oficina — Preparação (Setup)</option>
+          </optgroup>
           <option value="ferro_roubo">Ferro-Velho — Roubo de Carro</option>
           <option value="ferro_guincho">Ferro-Velho — Serviço de Guincho</option>
           <option value="ferro_disrupcao">Ferro-Velho — Missão de Disrupção</option>
@@ -695,6 +706,45 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
       <div style="background:var(--bg3);border-radius:5px;padding:10px;">
         <div style="font-size:11px;font-weight:700;color:#e17055;margin-bottom:6px;letter-spacing:1px;">👥 EQUIPE</div>
         <div style="font-size:12px;color:var(--muted);font-family:var(--mono);line-height:1.6;">Atirador, Motorista e Hacker — escolha os melhores para maximizar o lucro</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFICINA DICAS -->
+  <div id="ofiTips" style="display:none;margin-top:20px;background:var(--bg2);border:1px solid #3a2000;border-radius:6px;padding:16px;">
+    <div style="font-size:10px;font-family:var(--mono);color:#f39c12;letter-spacing:3px;margin-bottom:12px;">// CONTRATOS DA OFICINA — RANKING DE VALOR</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+      <div style="background:var(--bg3);border-radius:5px;padding:10px;border-left:3px solid #ffd700;">
+        <div style="font-size:11px;font-weight:700;color:#ffd700;margin-bottom:4px;">⭐ #1 — Union Depository</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);">Roubo de ouro do banco — mais lucrativo</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:5px;padding:10px;border-left:3px solid #f39c12;">
+        <div style="font-size:11px;font-weight:700;color:#f39c12;margin-bottom:4px;">#2 — Fleeca Bank</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);">Assalto a bancos Fleeca</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:5px;padding:10px;border-left:3px solid #e67e22;">
+        <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:4px;">#3 — Merryweather</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);">Roubo de arquivos secretos</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:5px;padding:10px;border-left:3px solid #d4850a;">
+        <div style="font-size:11px;font-weight:700;color:#d4850a;margin-bottom:4px;">#4 — The Convoy</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);">Placas de impressão do comboio</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:5px;padding:10px;border-left:3px solid #c07318;">
+        <div style="font-size:11px;font-weight:700;color:#c07318;margin-bottom:4px;">#5 — Bolingbroke</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);">Assassinato de alvos na prisão</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:5px;padding:10px;border-left:3px solid #a07830;">
+        <div style="font-size:11px;font-weight:700;color:#a07830;margin-bottom:4px;">#6 — IAA</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);">Receita de narcóticos da IAA</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:5px;padding:10px;border-left:3px solid #906828;">
+        <div style="font-size:11px;font-weight:700;color:#906828;margin-bottom:4px;">#7 — The Lost</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);">Destruição de labs dos Lost MC</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:5px;padding:10px;border-left:3px solid #806020;">
+        <div style="font-size:11px;font-weight:700;color:#806020;margin-bottom:4px;">#8 — Superdollar</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);">Unidades de controle de trem</div>
       </div>
     </div>
   </div>
@@ -1237,7 +1287,11 @@ const CAT_LABELS = {
   heist:'Golpe', contato:'Missão', corrida:'Corrida', agente:'Contrato',
   cayo_setup:'Cayo — Setup', cayo_solo:'Cayo — Solo', cayo_equipe:'Cayo — Equipe', cayo_elite:'Cayo — Elite ⭐',
   cassino_setup:'Cassino — Setup', cassino_furtivo:'Cassino — Furtivo', cassino_con:'Cassino — Grande Con', cassino_agressivo:'Cassino — Agressivo',
-  oficina_contrato:'Oficina — Contrato', oficina_cliente:'Oficina — Cliente', oficina_exotico:'Oficina — Exótico',
+  oficina_union:'Oficina — Union Depository ⭐', oficina_fleeca:'Oficina — Fleeca Bank',
+  oficina_merryweather:'Oficina — Merryweather', oficina_convoy:'Oficina — Convoy',
+  oficina_bolingbroke:'Oficina — Bolingbroke', oficina_iaa:'Oficina — IAA',
+  oficina_lost:'Oficina — Lost MC', oficina_superdollar:'Oficina — Superdollar',
+  oficina_setup:'Oficina — Setup', oficina_cliente:'Oficina — Cliente', oficina_exotico:'Oficina — Exótico',
   ferro_roubo:'Ferro — Roubo', ferro_guincho:'Ferro — Guincho',
   ferro_disrupcao:'Ferro — Disrupção', ferro_venda:'Ferro — Venda',
   lava_lavagem:'Lava — Lavagem $', lava_servico:'Lava — Serviço', lava_faber:'Lava — Faber',
@@ -1265,9 +1319,17 @@ const CAT_BADGE_STYLE = {
   cassino_furtivo:  'background:#1a1200;color:#b8a000;border:1px solid #4a3800;',
   cassino_con:      'background:#1a1200;color:#e6b800;border:1px solid #4a3800;',
   cassino_agressivo:'background:#1a1200;color:#ff7675;border:1px solid #4a1000;',
-  oficina_contrato: 'background:#1a0f00;color:#f39c12;border:1px solid #3a2000;',
-  oficina_cliente:  'background:#1a0f00;color:#e67e22;border:1px solid #3a2000;',
-  oficina_exotico:  'background:#1a0f00;color:#f0b27a;border:1px solid #3a2000;',
+  oficina_union:        'background:#1a0f00;color:#ffd700;border:1px solid #4a3000;',
+  oficina_fleeca:       'background:#1a0f00;color:#f39c12;border:1px solid #3a2000;',
+  oficina_merryweather: 'background:#1a0f00;color:#e67e22;border:1px solid #3a2000;',
+  oficina_convoy:       'background:#1a0f00;color:#f0a500;border:1px solid #3a2000;',
+  oficina_bolingbroke:  'background:#1a0f00;color:#e8960a;border:1px solid #3a2000;',
+  oficina_iaa:          'background:#1a0f00;color:#d4850a;border:1px solid #3a2000;',
+  oficina_lost:         'background:#1a0f00;color:#c07318;border:1px solid #3a2000;',
+  oficina_superdollar:  'background:#1a0f00;color:#e09020;border:1px solid #3a2000;',
+  oficina_setup:        'background:#1a0f00;color:#a07830;border:1px solid #3a2000;',
+  oficina_cliente:      'background:#1a0f00;color:#e67e22;border:1px solid #3a2000;',
+  oficina_exotico:      'background:#1a0f00;color:#f0b27a;border:1px solid #3a2000;',
   ferro_roubo:      'background:#1a0000;color:#e74c3c;border:1px solid #3a0000;',
   ferro_guincho:    'background:#1a0000;color:#c0392b;border:1px solid #3a0000;',
   ferro_disrupcao:  'background:#1a0000;color:#e57373;border:1px solid #3a0000;',
@@ -1314,7 +1376,15 @@ const CAT_PLACEHOLDERS = {
   cassino_furtivo:'ex: Furtivo — Ouro, equipe 4',
   cassino_con:'ex: Grande Con — Diamantes',
   cassino_agressivo:'ex: Agressivo — Dinheiro, solo',
-  oficina_contrato:'ex: Union Depository, Primo Taglio...',
+  oficina_union:'ex: Union Depository — ouro cofre principal',
+  oficina_fleeca:'ex: Fleeca Bank — assalto filial norte',
+  oficina_merryweather:'ex: Merryweather — arquivos secretos',
+  oficina_convoy:'ex: Convoy — placas de impressão',
+  oficina_bolingbroke:'ex: Bolingbroke — alvos eliminados',
+  oficina_iaa:'ex: IAA — receita de narcóticos',
+  oficina_lost:'ex: Lost MC — laboratórios destruídos',
+  oficina_superdollar:'ex: Superdollar — unidades de controle',
+  oficina_setup:'ex: Setup — equipamento / veículo',
   oficina_cliente:'ex: Modificação cliente #3',
   oficina_exotico:'ex: Lista exótica completa',
   ferro_roubo:'ex: Contrato — Roubo Carro #2',
@@ -1390,8 +1460,10 @@ function gSetFilter(f, btn){
   btn.classList.add('active');
   const cayoT    = $('cayoTips');
   const cassinoT = $('cassinoTips');
+  const ofiT     = $('ofiTips');
   if(cayoT)    cayoT.style.display    = f==='cayo'    ? 'block' : 'none';
   if(cassinoT) cassinoT.style.display = f==='cassino' ? 'block' : 'none';
+  if(ofiT)     ofiT.style.display     = f==='oficina' ? 'block' : 'none';
   renderGolpes();
 }
 
