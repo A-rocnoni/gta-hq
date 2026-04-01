@@ -466,6 +466,7 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
       <div class="add-field"><label>Ferro-Velho (R$)</label><input type="number" id="addFerro" placeholder="0,00" min="0" step="0.01" /></div>
       <div class="add-field"><label>MC Cocaína (R$)</label><input type="number" id="addCocaina" placeholder="0,00" min="0" step="0.01" /></div>
       <div class="add-field"><label>MC Meta (R$)</label><input type="number" id="addMeta" placeholder="0,00" min="0" step="0.01" /></div>
+      <div class="add-field"><label>MC Ácido (R$)</label><input type="number" id="addAcido" placeholder="0,00" min="0" step="0.01" /></div>
     </div>
     <button class="add-btn" onclick="addLucro()">+ Adicionar entrada</button>
   </div>
@@ -505,6 +506,7 @@ footer{text-align:center;padding:20px;font-size:10px;font-family:var(--mono);col
           <th>Ferro</th>
           <th>MC Coca</th>
           <th>MC Meta</th>
+          <th>MC Ácido</th>
           <th>Total</th>
           <th></th>
         </tr>
@@ -980,9 +982,9 @@ function load(k,def){ try{const v=localStorage.getItem('gta_'+k); return v!=null
 // LUCROS
 // ══════════════════════════════════════
 let lucros = load('lucros', []);
-const FONTES = ['boate','bunker','carros','oficina','ferro','cocaina','meta'];
-const FONTE_LABELS = ['Boate','Bunker','Carros','Oficina','Ferro','MC Cocaína','MC Meta'];
-const FONTE_ICONS  = ['🎵','📦','🚗','🔧','🔩','🧪','⚗️'];
+const FONTES = ['boate','bunker','carros','oficina','ferro','cocaina','meta','acido'];
+const FONTE_LABELS = ['Boate','Bunker','Carros','Oficina','Ferro','MC Cocaína','MC Meta','MC Ácido'];
+const FONTE_ICONS  = ['🎵','📦','🚗','🔧','🔩','🧪','⚗️','🔬'];
 
 // Data GTA: antes das 03:00 BRT = dia anterior (ainda é "ontem" no GTA)
 function getGTADate(){
@@ -1027,13 +1029,14 @@ function addLucro(){
     parseFloat($('addFerro').value)||0,
     parseFloat($('addCocaina').value)||0,
     parseFloat($('addMeta').value)||0,
+    parseFloat($('addAcido').value)||0,
   ];
   const total = vals.reduce((a,b)=>a+b,0);
   if(total===0){ showNotify('⚠ Digite pelo menos um valor!'); return; }
   lucros.push({ data, vals, total, _ts: new Date().toISOString() });
   lucros.sort((a,b)=>a.data.localeCompare(b.data));
   save('lucros', lucros);
-  ['addBoate','addBunker','addCarros','addOficina','addFerro','addCocaina','addMeta'].forEach(id=>{ const el=$(id); if(el) el.value=''; });
+  ['addBoate','addBunker','addCarros','addOficina','addFerro','addCocaina','addMeta','addAcido'].forEach(id=>{ const el=$(id); if(el) el.value=''; });
   renderLucrosTable();
   renderDashboard();
   renderSaldo();
@@ -1054,9 +1057,9 @@ function clearLucros(){
 }
 
 function exportCSV(){
-  let csv='Data,Boate,Bunker,Carros,Oficina,Ferro,MC Cocaína,MC Meta,Total\n';
+  let csv='Data,Boate,Bunker,Carros,Oficina,Ferro,MC Cocaína,MC Meta,MC Ácido,Total\n';
   lucros.forEach(r=>{
-    const vals = r.vals.length === 7 ? r.vals : [...r.vals, 0, 0];
+    const vals = r.vals.length >= 8 ? r.vals : [...r.vals, ...Array(8-r.vals.length).fill(0)];
     csv+=r.data+','+vals.join(',')+','+vals.reduce((a,b)=>a+b,0)+'\n';
   });
   const a=document.createElement('a');
@@ -1104,7 +1107,7 @@ function renderLucrosTable(){
   body.innerHTML = filtrados.map((r)=>{
     const origIdx = lucros.indexOf(r);
     // compatibilidade: entradas antigas têm 5 valores, novas têm 7
-    const vals = r.vals.length === 7 ? r.vals : [...r.vals, 0, 0];
+    const vals = r.vals.length >= 8 ? r.vals : [...r.vals, ...Array(8-r.vals.length).fill(0)];
     const total = vals.reduce((a,b)=>a+b, 0);
     return `<tr>
       <td class="td-dia">${r.data}</td>
@@ -1115,7 +1118,7 @@ function renderLucrosTable(){
   }).join('');
 
   const totals = FONTES.map((_,i)=>filtrados.reduce((a,r)=>{
-    const vals = r.vals.length === 7 ? r.vals : [...r.vals, 0, 0];
+    const vals = r.vals.length >= 8 ? r.vals : [...r.vals, ...Array(8-r.vals.length).fill(0)];
     return a+(vals[i]||0);
   },0));
   const grand  = totals.reduce((a,b)=>a+b,0);
@@ -1151,7 +1154,7 @@ function renderDashboard(){
   $('statFalta').textContent  = fmtM(Math.max(0,meta-grandTotal));
 
   const totals = FONTES.map((_,i)=>lucros.reduce((a,r)=>{
-    const vals = r.vals.length === 7 ? r.vals : [...r.vals, 0, 0];
+    const vals = r.vals.length >= 8 ? r.vals : [...r.vals, ...Array(8-r.vals.length).fill(0)];
     return a+(vals[i]||0);
   },0));
   const grid = $('fonteGrid');
