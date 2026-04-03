@@ -357,10 +357,34 @@ footer{text-align:center;padding:16px 20px;font-size:10px;font-family:var(--mono
 .backup-btn.import:hover{background:var(--gold-dk);}
 .backup-label{font-size:10px;font-family:var(--mono);color:var(--muted2);letter-spacing:1px;}
 #importFile{display:none;}
+#exportBanner{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;
+  background:#1a0d00;border-top:2px solid var(--gold);
+  padding:12px 20px;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.export-banner-text{font-size:13px;font-family:var(--mono);color:var(--gold);}
+.export-banner-text span{font-size:11px;color:var(--muted);display:block;margin-top:2px;}
+.export-banner-btns{display:flex;gap:8px;align-items:center;}
+.ebtn-export{padding:8px 18px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-family:var(--font);border:1px solid var(--green2);background:var(--green-dk);color:var(--green);border-radius:4px;cursor:pointer;}
+.ebtn-export:hover{background:var(--green);color:#000;}
+.ebtn-dismiss{padding:8px 14px;font-size:12px;font-family:var(--font);border:1px solid var(--border2);background:transparent;color:var(--muted);border-radius:4px;cursor:pointer;letter-spacing:1px;}
+.ebtn-dismiss:hover{color:var(--white);}
 </style>
 </head>
 <body>
 <div id="notify"></div>
+
+<!-- BANNER DE LEMBRETE DE BACKUP -->
+<div id="exportBanner">
+  <div class="export-banner-text">
+    ⚠ Lembre-se de exportar seu backup antes de sair!
+    <span>Clique em "↓ Exportar tudo" para salvar seu progresso com segurança.</span>
+  </div>
+  <div class="export-banner-btns">
+    <button class="ebtn-export" onclick="exportarDados();document.getElementById('exportBanner').style.display='none'">↓ Exportar agora</button>
+    <button class="ebtn-dismiss" onclick="document.getElementById('exportBanner').style.display='none'">Depois</button>
+  </div>
+</div>
 
 <nav>
   <div class="nav-brand">GTA <span>HQ</span></div>
@@ -1056,6 +1080,7 @@ function addLucro(){
   renderLucrosTable();
   renderDashboard();
   renderSaldo();
+  mostrarBannerBackup();
   showNotify('✓ Entrada adicionada!');
 }
 
@@ -1993,6 +2018,36 @@ renderChecklist();
 $('metaInput').value=meta.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 $('saldoInput').value=saldoInicial.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 renderSaldo();
+
+// ── Aviso ao fechar o site ──
+let _exportouNaSessao = false;
+
+function mostrarBannerBackup(){
+  if(!_exportouNaSessao){
+    const banner = document.getElementById('exportBanner');
+    if(banner) banner.style.display='flex';
+  }
+}
+
+const _exportarOriginal = exportarDados;
+window.exportarDados = function(){
+  _exportouNaSessao = true;
+  const banner = document.getElementById('exportBanner');
+  if(banner) banner.style.display='none';
+  _exportarOriginal();
+};
+
+// Banner após 1 minuto de uso
+setTimeout(mostrarBannerBackup, 60 * 1000);
+
+// Aviso ao tentar fechar/sair da página
+window.addEventListener('beforeunload', e => {
+  if(!_exportouNaSessao && (lucros.length > 0 || golpes.length > 0 || extras.length > 0)){
+    e.preventDefault();
+    e.returnValue = 'Você não exportou seu backup! Clique em "↓ Exportar tudo" antes de sair.';
+    return e.returnValue;
+  }
+});
 </script>
 </body>
 </html>
