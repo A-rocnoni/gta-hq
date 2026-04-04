@@ -494,14 +494,14 @@ footer{text-align:center;padding:16px 20px;font-size:10px;font-family:var(--mono
     <div class="add-row-title">// NOVA ENTRADA</div>
     <div class="add-fields">
       <div class="add-field"><label>Data</label><input type="date" id="addData" /></div>
-      <div class="add-field"><label>Boate (R$)</label><input type="number" id="addBoate" placeholder="0,00" min="0" step="0.01" /></div>
-      <div class="add-field"><label>Bunker — Armas (R$)</label><input type="number" id="addBunker" placeholder="0,00" min="0" step="0.01" /></div>
-      <div class="add-field"><label>Carros (R$)</label><input type="number" id="addCarros" placeholder="0,00" min="0" step="0.01" /></div>
-      <div class="add-field"><label>Oficina (R$)</label><input type="number" id="addOficina" placeholder="0,00" min="0" step="0.01" /></div>
-      <div class="add-field"><label>Ferro-Velho (R$)</label><input type="number" id="addFerro" placeholder="0,00" min="0" step="0.01" /></div>
-      <div class="add-field"><label>MC Cocaína (R$)</label><input type="number" id="addCocaina" placeholder="0,00" min="0" step="0.01" /></div>
-      <div class="add-field"><label>MC Meta (R$)</label><input type="number" id="addMeta" placeholder="0,00" min="0" step="0.01" /></div>
-      <div class="add-field"><label>MC Ácido (R$)</label><input type="number" id="addAcido" placeholder="0,00" min="0" step="0.01" /></div>
+      <div class="add-field"><label>Boate (R$)</label><input type="text" id="addBoate" placeholder="ex: 50.000,00" inputmode="decimal" /></div>
+      <div class="add-field"><label>Bunker — Armas (R$)</label><input type="text" id="addBunker" placeholder="ex: 50.000,00" inputmode="decimal" /></div>
+      <div class="add-field"><label>Carros (R$)</label><input type="text" id="addCarros" placeholder="ex: 47.000,00" inputmode="decimal" /></div>
+      <div class="add-field"><label>Oficina (R$)</label><input type="text" id="addOficina" placeholder="ex: 25.000,00" inputmode="decimal" /></div>
+      <div class="add-field"><label>Ferro-Velho (R$)</label><input type="text" id="addFerro" placeholder="ex: 19.200,00" inputmode="decimal" /></div>
+      <div class="add-field"><label>MC Cocaína (R$)</label><input type="text" id="addCocaina" placeholder="ex: 42.000,00" inputmode="decimal" /></div>
+      <div class="add-field"><label>MC Meta (R$)</label><input type="text" id="addMeta" placeholder="ex: 30.000,00" inputmode="decimal" /></div>
+      <div class="add-field"><label>MC Ácido (R$)</label><input type="text" id="addAcido" placeholder="ex: 29.000,00" inputmode="decimal" /></div>
     </div>
     <button class="add-btn" onclick="addLucro()">+ Adicionar entrada</button>
   </div>
@@ -566,7 +566,7 @@ footer{text-align:center;padding:16px 20px;font-size:10px;font-family:var(--mono
     <div class="add-fields">
       <div class="add-field"><label>Data</label><input type="date" id="exData" /></div>
       <div class="add-field" style="grid-column:span 2"><label>Descrição</label><input type="text" id="exDesc" placeholder="ex: Missão Simeon, bonus diário..." /></div>
-      <div class="add-field"><label>Valor (R$)</label><input type="number" id="exValor" placeholder="0,00" min="0" step="0.01" /></div>
+      <div class="add-field"><label>Valor (R$)</label><input type="text" id="exValor" placeholder="ex: 5.000,00 ou 1.5mi" inputmode="decimal" /></div>
     </div>
     <button class="add-btn" onclick="addExtra()">+ Adicionar valor avulso</button>
   </div>
@@ -727,7 +727,7 @@ footer{text-align:center;padding:16px 20px;font-size:10px;font-family:var(--mono
       </div>
       <div class="g-field">
         <label>Minha parte (R$)</label>
-        <input type="number" id="gValor" placeholder="0,00" min="0" step="0.01" />
+        <input type="text" id="gValor" placeholder="ex: 250.000,00 ou 1.5mi" inputmode="decimal" />
       </div>
     </div>
     <button class="g-add-btn" onclick="addGolpe()">+ Adicionar</button>
@@ -1059,17 +1059,44 @@ setInterval(()=>{
   }
 }, 60000);
 
+// Converte valor digitado em número — aceita: 250.000,00 / 250000,00 / 250000.00 / 1.5bi / 500mi
+function parseInput(str){
+  if(!str) return 0;
+  const s = str.toString().trim().toLowerCase();
+  // Verifica sufixos mi/bi/tri/quad
+  const match = s.match(/^([\d.,]+)\s*(quad|tri|bi|mi)?$/);
+  if(!match) return 0;
+  let num = match[1];
+  const suffix = match[2];
+  // Remove pontos de milhar e converte vírgula decimal
+  // Ex: 250.000,00 → 250000.00
+  if(num.includes(',') && num.includes('.')){
+    // Formato BR: 250.000,00
+    num = num.replace(/\./g,'').replace(',','.');
+  } else if(num.includes(',')){
+    // Só vírgula: 250000,00
+    num = num.replace(',','.');
+  }
+  // Se só ponto: 250000.00 ou 250.000 (ambíguo — trata como número)
+  const val = parseFloat(num)||0;
+  if(suffix==='quad') return val * 1e15;
+  if(suffix==='tri')  return val * 1e12;
+  if(suffix==='bi')   return val * 1e9;
+  if(suffix==='mi')   return val * 1e6;
+  return val;
+}
+
 function addLucro(){
   const data = $('addData').value || getGTADate();
   const vals = [
-    parseFloat($('addBoate').value)||0,
-    parseFloat($('addBunker').value)||0,
-    parseFloat($('addCarros').value)||0,
-    parseFloat($('addOficina').value)||0,
-    parseFloat($('addFerro').value)||0,
-    parseFloat($('addCocaina').value)||0,
-    parseFloat($('addMeta').value)||0,
-    parseFloat($('addAcido').value)||0,
+    parseInput($('addBoate').value),
+    parseInput($('addBunker').value),
+    parseInput($('addCarros').value),
+    parseInput($('addOficina').value),
+    parseInput($('addFerro').value),
+    parseInput($('addCocaina').value),
+    parseInput($('addMeta').value),
+    parseInput($('addAcido').value),
   ];
   const total = vals.reduce((a,b)=>a+b,0);
   if(total===0){ showNotify('⚠ Digite pelo menos um valor!'); return; }
@@ -1401,9 +1428,9 @@ let extras = load('extras', []);
 $('exData').value = new Date().toISOString().slice(0,10);
 
 function addExtra(){
-  const data  = $('exData').value || new Date().toISOString().slice(0,10);
+  const data  = $('exData').value || getGTADate();
   const desc  = $('exDesc').value.trim();
-  const valor = parseFloat($('exValor').value) || 0;
+  const valor = parseInput($('exValor').value);
   if(!desc){ showNotify('⚠ Digite uma descrição!'); return; }
   if(valor<=0){ showNotify('⚠ Digite um valor maior que zero!'); return; }
   extras.push({ data, desc, valor, _ts: new Date().toISOString() });
@@ -1446,7 +1473,7 @@ function renderExtras(){
                <input id="eedit-desc-${i}" type="text" value="${e.desc}"
                  style="flex:1;min-width:140px;padding:5px 8px;font-size:13px;font-family:var(--mono);
                         background:var(--bg4);border:1px solid var(--green2);border-radius:4px;color:var(--green);outline:none;" />
-               <input id="eedit-valor-${i}" type="number" value="${e.valor}" step="0.01"
+               <input id="eedit-valor-${i}" type="text" value="${e.valor}" placeholder="ex: 250k ou 1.5mi"
                  style="width:120px;padding:5px 8px;font-size:13px;font-family:var(--mono);
                         background:var(--bg4);border:1px solid var(--green2);border-radius:4px;color:var(--gold);outline:none;" />
              </div>`
@@ -1470,7 +1497,7 @@ function startExtraEdit(i){ extras[i]._editing=true; renderExtras(); }
 function cancelExtraEdit(i){ delete extras[i]._editing; renderExtras(); }
 function saveExtraEdit(i){
   const novaDesc  = ($('eedit-desc-'+i)||{}).value?.trim();
-  const novoValor = parseFloat(($('eedit-valor-'+i)||{}).value)||0;
+  const novoValor = parseVal(($('eedit-valor-'+i)||{}).value||'0');
   if(!novaDesc){ showNotify('⚠ A descrição não pode ficar vazia!'); return; }
   if(novoValor<=0){ showNotify('⚠ O valor deve ser maior que zero!'); return; }
   extras[i].desc  = novaDesc;
@@ -1716,7 +1743,7 @@ function addGolpe(){
   const data  = $('gData').value || new Date().toISOString().slice(0,10);
   const cat   = $('gCat').value;
   const nome  = $('gNome').value.trim();
-  const valor = parseFloat($('gValor').value) || 0;
+  const valor = parseInput($('gValor').value);
   if(!nome){ showNotify('⚠ Digite o nome da atividade!'); return; }
   if(valor<=0){ showNotify('⚠ Digite um valor maior que zero!'); return; }
   golpes.push({ data, cat, nome, valor, _ts: new Date().toISOString() });
