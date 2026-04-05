@@ -294,6 +294,7 @@ tr:hover td{background:var(--bg3);}
 .g-filter.cat-agencia.active{background:#001530;border-color:#74b9ff;color:#74b9ff;}
 .g-filter.cat-payphone.active{background:#1a0a00;border-color:#ff7675;color:#ff7675;}
 .g-filter.cat-drugwars.active{background:#0d1a00;border-color:#a8e063;color:#a8e063;}
+.g-filter.cat-boate-gest.active{background:#1a0015;border-color:#e91e8c;color:#e91e8c;}
 .g-filter.cat-cayo.active{background:#001a12;border-color:#55efc4;color:#55efc4;}
 .g-filter.cat-cassino.active{background:#1a1200;border-color:#fdcb6e;color:#fdcb6e;}
 .g-filter.cat-contato.active{background:#001a30;border-color:var(--blue);color:var(--blue);}
@@ -615,6 +616,23 @@ footer{text-align:center;padding:16px 20px;font-size:10px;font-family:var(--mono
           <option value="contato">Missão de Contato</option>
           <option value="corrida">Corrida / Atividade</option>
           <option value="agente">Contrato do Agente</option>
+          <optgroup label="── Gestão da Boate ──">
+            <option value="boate_cartazes">Boate — Espalhar Cartazes</option>
+            <option value="boate_dj">Boate — Buscar DJ</option>
+            <option value="boate_rivais">Boate — Destruir Equipamentos Rivais</option>
+            <option value="boate_encrenqueiro">Boate — Expulsar Encrenqueiro</option>
+            <option value="boate_vip">Boate — Escoltar VIP (Marcel)</option>
+          </optgroup>
+          <optgroup label="── Boate: Vendas de Produtos ──">
+            <option value="boate_venda_importacao_unit">Boate — Importações Sul-Americanas (Cocaína MC)</option>
+            <option value="boate_venda_esportivos_unit">Boate — Artigos Esportivos (Bunker)</option>
+            <option value="boate_venda_farmaceutica_unit">Boate — Pesquisas Farmacêuticas (Meta MC)</option>
+            <option value="boate_venda_cargas_unit">Boate — Cargas e Remessas (CEO/Hangar)</option>
+            <option value="boate_venda_dinheiro_unit">Boate — Criação de Dinheiro (Din. Falso MC)</option>
+            <option value="boate_venda_organicos_unit">Boate — Produtos Orgânicos (Maconha MC)</option>
+            <option value="boate_venda_impressao_unit">Boate — Impressão e Cópia (Docs Falsos MC)</option>
+            <option value="boate_venda_total">Boate — Venda Total do Estoque ⭐</option>
+          </optgroup>
           <option value="cluckin_bell">Contrato — Invasão à Fazenda Cluckin' Bell</option>
           <optgroup label="── Agência (Franklin) ──">
             <option value="agencia_security_asset">Agência — Proteção de Bens</option>
@@ -655,6 +673,14 @@ footer{text-align:center;padding:16px 20px;font-size:10px;font-family:var(--mono
             <option value="cassino_con">Cassino — A Grande Trapaça</option>
             <option value="cassino_agressivo">Cassino — Agressivo</option>
           </optgroup>
+          <optgroup label="── Cassino: Missões da Sra. Baker ──">
+            <option value="baker_1">Baker (1) — Apenas Negócios</option>
+            <option value="baker_2">Baker (2) — Jogando Alto</option>
+            <option value="baker_3">Baker (3) — Pedindo a Conta</option>
+            <option value="baker_4">Baker (4) — Travessia</option>
+            <option value="baker_5">Baker (5) — Fazendo a Festa</option>
+            <option value="baker_6">Baker (6) — Final ⭐</option>
+          </optgroup>
           <option value="oficina_cliente">Oficina — Modificação de Cliente</option>
           <option value="oficina_exotico">Oficina — Exportação Exótica</option>
           <optgroup label="── Oficina: Contratos ──">
@@ -689,10 +715,13 @@ footer{text-align:center;padding:16px 20px;font-size:10px;font-family:var(--mono
             <option value="acido_venda_distancia">Lab de Ácido — Venda à Distância</option>
           </optgroup>
           <optgroup label="── Traficantes de Rua ──">
-            <option value="traf_cocaina">Traficante — Cocaína</option>
-            <option value="traf_meta">Traficante — Metanfetamina</option>
-            <option value="traf_maconha">Traficante — Maconha</option>
-            <option value="traf_dinheiro">Traficante — Dinheiro Falso</option>
+            <option value="traf_importacao">Traficantes — Importações Sul-Americanas (Cocaína MC)</option>
+            <option value="traf_esportivos">Traficantes — Artigos Esportivos (Bunker)</option>
+            <option value="traf_farmaceutica">Traficantes — Pesquisas Farmacêuticas (Meta MC)</option>
+            <option value="traf_cargas">Traficantes — Cargas e Remessas (CEO/Hangar)</option>
+            <option value="traf_dinheiro">Traficantes — Criação de Dinheiro (Din. Falso MC)</option>
+            <option value="traf_organicos">Traficantes — Produtos Orgânicos (Maconha MC)</option>
+            <option value="traf_impressao">Traficantes — Impressão e Cópia (Docs Falsos MC)</option>
           </optgroup>
           <optgroup label="── Motoclube: Cocaína ──">
             <option value="mc_cocaina_suprimento">MC Cocaína — Suprimento</option>
@@ -743,6 +772,7 @@ footer{text-align:center;padding:16px 20px;font-size:10px;font-family:var(--mono
     <div class="g-stat"><div class="g-stat-lbl">Agência</div><div class="g-stat-val" style="color:#74b9ff" id="gTotalAgencia">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Payphone Hits</div><div class="g-stat-val" style="color:#ff7675" id="gTotalPayphone">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Drug Wars</div><div class="g-stat-val" style="color:#a8e063" id="gTotalDrugwars">R$ 0</div></div>
+    <div class="g-stat"><div class="g-stat-lbl">Gestão Boate</div><div class="g-stat-val" style="color:#e91e8c" id="gTotalBoateGest">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Missões</div><div class="g-stat-val" style="color:var(--blue)" id="gTotalContato">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Corridas</div><div class="g-stat-val" style="color:var(--orange)" id="gTotalCorrida">R$ 0</div></div>
     <div class="g-stat"><div class="g-stat-lbl">Contratos</div><div class="g-stat-val" style="color:var(--green)" id="gTotalAgente">R$ 0</div></div>
@@ -766,6 +796,7 @@ footer{text-align:center;padding:16px 20px;font-size:10px;font-family:var(--mono
     <button class="g-filter cat-agencia" onclick="gSetFilter('agencia',this)">Agência</button>
     <button class="g-filter cat-payphone" onclick="gSetFilter('payphone',this)">Orelhão</button>
     <button class="g-filter cat-drugwars" onclick="gSetFilter('drugwars',this)">Guerras de Drogas</button>
+    <button class="g-filter cat-boate-gest" onclick="gSetFilter('boate_gest',this)">Gestão Boate</button>
     <button class="g-filter cat-contato" onclick="gSetFilter('contato',this)">Missões</button>
     <button class="g-filter cat-corrida" onclick="gSetFilter('corrida',this)">Corridas</button>
     <button class="g-filter cat-agente" onclick="gSetFilter('agente',this)">Contratos</button>
@@ -1523,6 +1554,17 @@ const CAT_LABELS = {
   heist_vazamento:'Juízo Final — Ato I', heist_bogdan:'Juízo Final — Ato II',
   heist_juizo:'Juízo Final — Ato III',
   contato:'Missão de Contato', corrida:'Corrida', agente:'Contrato',
+  boate_cartazes:'Boate — Cartazes', boate_dj:'Boate — Buscar DJ',
+  boate_rivais:'Boate — Rivais', boate_encrenqueiro:'Boate — Encrenqueiro',
+  boate_vip:'Boate — VIP (Marcel)',
+  boate_venda_importacao_unit:'Boate — Import. Sul-Americana',
+  boate_venda_esportivos_unit:'Boate — Artigos Esportivos',
+  boate_venda_farmaceutica_unit:'Boate — Pesq. Farmacêutica',
+  boate_venda_cargas_unit:'Boate — Cargas e Remessas',
+  boate_venda_dinheiro_unit:'Boate — Criação de Dinheiro',
+  boate_venda_organicos_unit:'Boate — Produtos Orgânicos',
+  boate_venda_impressao_unit:'Boate — Impressão e Cópia',
+  boate_venda_total:'Boate — Venda Total Estoque ⭐',
   cluckin_bell:'Cluckin\' Bell Raid',
   agencia_security_asset:'Agência — Proteção de Bens',
   agencia_security_gang:'Agência — Eliminação de Gangue',
@@ -1541,6 +1583,9 @@ const CAT_LABELS = {
   contato_madrazo:'Despacho Madrazo',
   cayo_setup:'Cayo — Setup', cayo_solo:'Cayo — Solo', cayo_equipe:'Cayo — Equipe', cayo_elite:'Cayo — Elite ⭐',
   cassino_setup:'Cassino — Setup', cassino_furtivo:'Cassino — Furtivo', cassino_con:'Cassino — Grande Con', cassino_agressivo:'Cassino — Agressivo',
+  baker_1:'Baker (1) — Apenas Negócios', baker_2:'Baker (2) — Jogando Alto',
+  baker_3:'Baker (3) — Pedindo a Conta', baker_4:'Baker (4) — Travessia',
+  baker_5:'Baker (5) — Fazendo a Festa', baker_6:'Baker (6) — Final ⭐',
   oficina_union:'Oficina — Union Depository ⭐', oficina_fleeca:'Oficina — Fleeca Bank',
   oficina_merryweather:'Oficina — Merryweather', oficina_convoy:'Oficina — Convoy',
   oficina_bolingbroke:'Oficina — Bolingbroke', oficina_iaa:'Oficina — IAA',
@@ -1557,7 +1602,10 @@ const CAT_LABELS = {
   mc_dinheiro_suprimento:'MC Din.Falso — Suprimento', mc_dinheiro_local:'MC Din.Falso — Local', mc_dinheiro_distancia:'MC Din.Falso — Dist.',
   mc_maconha_suprimento:'MC Maconha — Suprimento', mc_maconha_local:'MC Maconha — Local', mc_maconha_distancia:'MC Maconha — Dist.',
   mc_docs_suprimento:'MC Docs — Suprimento', mc_docs_local:'MC Docs — Local', mc_docs_distancia:'MC Docs — Dist.',
-  traf_cocaina:'Traficante — Cocaína', traf_meta:'Traficante — Meta', traf_maconha:'Traficante — Maconha', traf_dinheiro:'Traficante — Din. Falso',
+  traf_importacao:'Traf. — Import. Sul-Americana', traf_esportivos:'Traf. — Artigos Esportivos',
+  traf_farmaceutica:'Traf. — Pesq. Farmacêutica', traf_cargas:'Traf. — Cargas e Remessas',
+  traf_dinheiro:'Traf. — Criação de Dinheiro', traf_organicos:'Traf. — Produtos Orgânicos',
+  traf_impressao:'Traf. — Impressão e Cópia',
 };
 
 const CAT_BADGE_STYLE = {
@@ -1572,6 +1620,19 @@ const CAT_BADGE_STYLE = {
   contato:          'background:var(--blue-dk);color:var(--blue);border:1px solid #1a3a6c;',
   corrida:          'background:#1a0d00;color:var(--orange);border:1px solid #3a1a00;',
   agente:           'background:var(--green-dk);color:var(--green2);border:1px solid #004a1a;',
+  boate_cartazes:   'background:#1a0015;color:#e91e8c;border:1px solid #5a0040;',
+  boate_dj:         'background:#1a0015;color:#f06292;border:1px solid #5a0040;',
+  boate_rivais:     'background:#1a0015;color:#ce93d8;border:1px solid #5a0040;',
+  boate_encrenqueiro:'background:#1a0015;color:#f48fb1;border:1px solid #5a0040;',
+  boate_vip:        'background:#1a0015;color:#ff80ab;border:1px solid #5a0040;',
+  boate_venda_importacao_unit:  'background:#1a0020;color:#ff4db8;border:1px solid #6a0050;',
+  boate_venda_esportivos_unit:  'background:#1a0020;color:#e040fb;border:1px solid #6a0050;',
+  boate_venda_farmaceutica_unit:'background:#1a0020;color:#ce93d8;border:1px solid #6a0050;',
+  boate_venda_cargas_unit:      'background:#1a0020;color:#f48fb1;border:1px solid #6a0050;',
+  boate_venda_dinheiro_unit:    'background:#1a0020;color:#ff80ab;border:1px solid #6a0050;',
+  boate_venda_organicos_unit:   'background:#1a0020;color:#ea80fc;border:1px solid #6a0050;',
+  boate_venda_impressao_unit:   'background:#1a0020;color:#b39ddb;border:1px solid #6a0050;',
+  boate_venda_total:            'background:#1a0020;color:#ffd700;border:1px solid #6a0050;',
   cluckin_bell:     'background:#0a1a00;color:#7ec850;border:1px solid #2a5000;',
   agencia_security_asset:    'background:#001530;color:#74b9ff;border:1px solid #003080;',
   agencia_security_gang:     'background:#001530;color:#74b9ff;border:1px solid #003080;',
@@ -1600,6 +1661,12 @@ const CAT_BADGE_STYLE = {
   cassino_furtivo:  'background:#1a1200;color:#b8a000;border:1px solid #4a3800;',
   cassino_con:      'background:#1a1200;color:#e6b800;border:1px solid #4a3800;',
   cassino_agressivo:'background:#1a1200;color:#ff7675;border:1px solid #4a1000;',
+  baker_1:'background:#001025;color:#64b5f6;border:1px solid #003060;',
+  baker_2:'background:#001025;color:#42a5f5;border:1px solid #003060;',
+  baker_3:'background:#001025;color:#2196f3;border:1px solid #003060;',
+  baker_4:'background:#001025;color:#1e88e5;border:1px solid #003060;',
+  baker_5:'background:#001025;color:#90caf9;border:1px solid #003060;',
+  baker_6:'background:#001025;color:#ffd700;border:1px solid #003060;',
   oficina_union:        'background:#1a0f00;color:#ffd700;border:1px solid #4a3000;',
   oficina_fleeca:       'background:#1a0f00;color:#f39c12;border:1px solid #3a2000;',
   oficina_merryweather: 'background:#1a0f00;color:#e67e22;border:1px solid #3a2000;',
@@ -1640,9 +1707,13 @@ const CAT_BADGE_STYLE = {
   mc_docs_suprimento:      'background:#1a0010;color:#a01c58;border:1px solid #4a0030;',
   mc_docs_local:           'background:#1a0010;color:#b03070;border:1px solid #4a0030;',
   mc_docs_distancia:       'background:#1a0010;color:#c04488;border:1px solid #4a0030;',
-  traf_cocaina:  'background:#0d1a00;color:#a8e063;border:1px solid #3a5a00;',
-  traf_meta:     'background:#0d1a00;color:#c8f080;border:1px solid #3a5a00;',
-  traf_maconha:  'background:#0d1a00;color:#88c040;border:1px solid #3a5a00;',
+  traf_importacao:   'background:#0d1a00;color:#a8e063;border:1px solid #3a5a00;',
+  traf_esportivos:   'background:#0d1a00;color:#c8f080;border:1px solid #3a5a00;',
+  traf_farmaceutica: 'background:#0d1a00;color:#88c040;border:1px solid #3a5a00;',
+  traf_cargas:       'background:#0d1a00;color:#b0d860;border:1px solid #3a5a00;',
+  traf_dinheiro:     'background:#0d1a00;color:#d0e870;border:1px solid #3a5a00;',
+  traf_organicos:    'background:#0d1a00;color:#78b830;border:1px solid #3a5a00;',
+  traf_impressao:    'background:#0d1a00;color:#98c850;border:1px solid #3a5a00;',
   traf_dinheiro: 'background:#0d1a00;color:#b0d870;border:1px solid #3a5a00;',
 };
 
@@ -1657,6 +1728,19 @@ const CAT_PLACEHOLDERS = {
   heist_juizo:'ex: Doomsday Ato III — final',
   contato:'ex: Missão Simeon...',
   corrida:'ex: Corrida Stunt...', agente:'ex: Série A...',
+  boate_cartazes:'ex: Cartazes — popularidade +10%',
+  boate_dj:'ex: Buscar DJ — popularidade +10%',
+  boate_rivais:'ex: Destruir equipamentos — bônus',
+  boate_encrenqueiro:'ex: Expulsar encrenqueiro — Marcel',
+  boate_vip:'ex: Escoltar VIP — Marcel',
+  boate_venda_importacao_unit:'ex: Import. Sul-Am. — venda parcial',
+  boate_venda_esportivos_unit:'ex: Art. Esportivos — venda parcial',
+  boate_venda_farmaceutica_unit:'ex: Pesq. Farmacêutica — venda parcial',
+  boate_venda_cargas_unit:'ex: Cargas e Remessas — venda parcial',
+  boate_venda_dinheiro_unit:'ex: Criação de Dinheiro — venda parcial',
+  boate_venda_organicos_unit:'ex: Produtos Orgânicos — venda parcial',
+  boate_venda_impressao_unit:'ex: Impressão e Cópia — venda parcial',
+  boate_venda_total:'ex: Venda total do estoque — boate cheia',
   cluckin_bell:'ex: Cluckin\' Bell — Vicent, solo',
   agencia_security_asset:'ex: Asset Protection — dificuldade Specialist+',
   agencia_security_gang:'ex: Gang Termination — Los Santos',
@@ -1685,6 +1769,12 @@ const CAT_PLACEHOLDERS = {
   cassino_furtivo:'ex: Furtivo — Ouro, equipe 4',
   cassino_con:'ex: Grande Con — Diamantes',
   cassino_agressivo:'ex: Agressivo — Dinheiro, solo',
+  baker_1:'ex: Apenas Negócios — proteger Tao Cheng',
+  baker_2:'ex: Jogando Alto — escoltar VIP',
+  baker_3:'ex: Pedindo a Conta — rancho Duggan',
+  baker_4:'ex: Travessia — caminhão blindado',
+  baker_5:'ex: Fazendo a Festa — defender cassino',
+  baker_6:'ex: Final — confrontar Avery Duggan',
   oficina_union:'ex: Union Depository — ouro cofre principal',
   oficina_fleeca:'ex: Fleeca Bank — assalto filial norte',
   oficina_merryweather:'ex: Merryweather — arquivos secretos',
@@ -1725,9 +1815,13 @@ const CAT_PLACEHOLDERS = {
   mc_docs_suprimento:'ex: Suprimento docs falsos',
   mc_docs_local:'ex: Venda docs falsos — local',
   mc_docs_distancia:'ex: Venda docs falsos — distância',
-  traf_cocaina:'ex: Venda cocaína — traficante Strawberry',
-  traf_meta:'ex: Venda meta — traficante Sandy Shores',
-  traf_maconha:'ex: Venda maconha — traficante Vespucci',
+  traf_importacao:'ex: Import. Sul-Americana — lote completo',
+  traf_esportivos:'ex: Artigos Esportivos — bunker cheio',
+  traf_farmaceutica:'ex: Pesq. Farmacêutica — entrega distância',
+  traf_cargas:'ex: Cargas e Remessas — CEO/Hangar',
+  traf_dinheiro:'ex: Criação de Dinheiro — fábrica MC',
+  traf_organicos:'ex: Produtos Orgânicos — fazenda maconha',
+  traf_impressao:'ex: Impressão e Cópia — docs falsos MC',
   traf_dinheiro:'ex: Venda din. falso — traficante LS',
 };
 
@@ -1782,10 +1876,11 @@ function gFilterMatch(g){
   if(gFilter==='heist')       return g.cat.startsWith('heist_') && !['heist_vazamento','heist_bogdan','heist_juizo'].includes(g.cat);
   if(gFilter==='doomsday')    return ['heist_vazamento','heist_bogdan','heist_juizo'].includes(g.cat);
   if(gFilter==='cayo')        return g.cat.startsWith('cayo');
-  if(gFilter==='cassino')     return g.cat.startsWith('cassino');
+  if(gFilter==='cassino')     return g.cat.startsWith('cassino') || g.cat.startsWith('baker');
   if(gFilter==='cluckin_bell')return g.cat === 'cluckin_bell';
   if(gFilter==='agencia')     return g.cat.startsWith('agencia');
   if(gFilter==='payphone')    return g.cat.startsWith('payphone');
+  if(gFilter==='boate_gest') return g.cat.startsWith('boate_');
   if(gFilter==='drugwars')    return g.cat.startsWith('drugwars');
   if(gFilter==='oficina')     return g.cat.startsWith('oficina');
   if(gFilter==='ferro')       return g.cat.startsWith('ferro');
@@ -1801,16 +1896,17 @@ function renderGolpes(){
   const filtered = golpes.filter(g => gFilterMatch(g));
   const list = $('gList'), empty = $('gEmpty');
 
-  const tots = { heist:0, doomsday:0, cayo:0, cassino:0, cluckin_bell:0, agencia:0, payphone:0, drugwars:0, contato:0, corrida:0, agente:0, oficina:0, ferro:0, lava:0, bunker:0, acido:0, mc:0, traf:0 };
+  const tots = { heist:0, doomsday:0, cayo:0, cassino:0, cluckin_bell:0, agencia:0, payphone:0, drugwars:0, boate_gest:0, contato:0, corrida:0, agente:0, oficina:0, ferro:0, lava:0, bunker:0, acido:0, mc:0, traf:0 };
   golpes.forEach(g=>{
     const key = ['heist_vazamento','heist_bogdan','heist_juizo'].includes(g.cat) ? 'doomsday'
               : g.cat.startsWith('heist_')   ? 'heist'
               : g.cat.startsWith('cayo')     ? 'cayo'
-              : g.cat.startsWith('cassino')  ? 'cassino'
+              : g.cat.startsWith('cassino') || g.cat.startsWith('baker') ? 'cassino'
               : g.cat === 'cluckin_bell'     ? 'cluckin_bell'
               : g.cat.startsWith('agencia')  ? 'agencia'
               : g.cat.startsWith('payphone') ? 'payphone'
               : g.cat.startsWith('drugwars') ? 'drugwars'
+              : g.cat.startsWith('boate_')   ? 'boate_gest'
               : g.cat.startsWith('contato')  ? 'contato'
               : g.cat.startsWith('oficina')  ? 'oficina'
               : g.cat.startsWith('ferro')    ? 'ferro'
@@ -1832,6 +1928,7 @@ function renderGolpes(){
   $('gTotalAgencia').textContent  = fmtM(tots.agencia);
   $('gTotalPayphone').textContent = fmtM(tots.payphone);
   $('gTotalDrugwars').textContent = fmtM(tots.drugwars);
+  $('gTotalBoateGest').textContent = fmtM(tots.boate_gest);
   $('gTotalContato').textContent  = fmtM(tots.contato);
   $('gTotalCorrida').textContent  = fmtM(tots.corrida);
   $('gTotalAgente').textContent   = fmtM(tots.agente);
